@@ -8,6 +8,8 @@ import { useChessClockStore } from '@/store/useChessClockStore';
 import { Trophy, RefreshCcw, LogOut, Download, Activity, X, Skull, Handshake, Timer, Flag, Scale, Target, Clock, RotateCcw, Crown, Sparkles, Eye, Home } from 'lucide-react';
 import { audioManager } from '@/lib/audioManager';
 import { useAndroidBack } from '@/hooks/useAndroidBack';
+import { useEngineStore } from '@/store/useEngineStore';
+import { useToastStore } from '@/store/useToastStore';
 
 const ChessKnightIcon = ({ className }: { className?: string }) => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className={className}>
@@ -227,11 +229,25 @@ export default function GameOverModal() {
   };
 
   const handleRestart = () => {
+    useEngineStore.getState().cancelAIRequest();
     setIsVisible(false);
     resetGame();
+    if (matchConfig.timeControl) {
+      useChessClockStore.getState().resetClock(matchConfig.timeControl.minutes * 60 * 1000);
+    } else {
+      useChessClockStore.getState().resetClock(10 * 60 * 1000);
+    }
+    useChessClockStore.getState().startClock('w');
+    useToastStore.getState().addToast({
+      type: 'success',
+      title: 'Game Restarted',
+      message: 'The board has been reset.',
+      duration: 2000,
+    });
   };
 
   const handleNewGame = () => {
+    useEngineStore.getState().cancelAIRequest();
     setIsVisible(false);
     setAppState('onboarding');
     resetGame();

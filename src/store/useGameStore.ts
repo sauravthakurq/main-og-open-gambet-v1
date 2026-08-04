@@ -6,6 +6,7 @@ import { useAppStore } from './useAppStore';
 
 interface GameState {
   game: Chess;
+  gameId: string;
   fen: string;
   pgn: string;
   history: Move[];
@@ -131,11 +132,11 @@ export const useGameStore = create<GameState>()(
   persist(
     (set, get) => {
       const initialGame = new Chess();
-      
       return {
         game: initialGame,
+        gameId: Math.random().toString(36).substring(2, 15) + Date.now().toString(36),
         fen: initialGame.fen(),
-        pgn: '',
+        pgn: initialGame.pgn(),
         history: [],
         redoStack: [],
         turn: initialGame.turn(),
@@ -255,6 +256,7 @@ export const useGameStore = create<GameState>()(
       const newGame = new Chess();
       set({
         game: newGame,
+        gameId: Math.random().toString(36).substring(2, 15) + Date.now().toString(36),
         fen: newGame.fen(),
         pgn: newGame.pgn(),
         history: [],

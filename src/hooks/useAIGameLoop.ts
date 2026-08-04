@@ -6,7 +6,7 @@ import { useAppStore } from '@/store/useAppStore';
 import { useToastStore } from '@/store/useToastStore';
 
 export function useAIGameLoop(aiColor: 'w' | 'b' = 'b') {
-  const { turn, fen, makeMove, history, isCheckmate, game } = useGameStore();
+  const { turn, fen, makeMove, history, isCheckmate, game, gameId } = useGameStore();
   const { engineType, provider, model, apiKeys, baseUrls, organizations, temperatures, maxTokens, isConnected } = useAISettingsStore();
   const { engineInfo, addBestMoveListener, removeBestMoveListener, setIsThinking, playComputerMove, setConnectionState, recordResponseTime, setAbortController, retryCount } = useEngineStore();
   const { appState, matchConfig, isPaused } = useAppStore();
@@ -156,6 +156,13 @@ export function useAIGameLoop(aiColor: 'w' | 'b' = 'b') {
             setConnectionState('Connected');
             
             if (data.bestMove) {
+              // Verify game hasn't been restarted while we were fetching
+              if (useGameStore.getState().gameId !== gameId) {
+                console.log('[AI Game Loop] Game restarted during fetch. Discarding move.');
+                success = true;
+                break;
+              }
+
               const move = data.bestMove;
               if (legalMoves.includes(move)) {
                 const source = move.substring(0, 2);
@@ -177,7 +184,7 @@ export function useAIGameLoop(aiColor: 'w' | 'b' = 'b') {
             }
           } catch (err: any) {
             if (err.name === 'AbortError') {
-              console.log('[AI Game Loop] Request aborted due to pause.');
+              console.log('[AI Game Loop] Request aborted due to pause or restart.');
               setConnectionState('Cancelled');
               success = true; // Break loop gracefully
               break;
@@ -187,14 +194,34 @@ export function useAIGameLoop(aiColor: 'w' | 'b' = 'b') {
             }
             if (!navigator.onLine) {
               setConnectionState('Network Offline');
-            } else if (err.message.includes('Timeout') || err.message.includes('fetch')) {
+              if (attempts >= 3) {
+                useToastStore.getState().addToast({
+                  type: 'error',
+                  title: 'Network Offline',
+                  message: 'Internet connection lost. Please check your network and try again.',
+                });
+              }
+            } else if (err.message?.includes('Timeout') || err.message?.includes('fetch')) {
               setConnectionState('Timeout');
+              if (attempts >= 3) {
+                useToastStore.getState().addToast({
+                  type: 'error',
+                  title: 'Connection Timeout',
+                  message: 'The AI provider is taking too long to respond. Please try again.',
+                });
+              }
+            } else if (attempts >= 3) {
+              setConnectionState('API Error');
+              useToastStore.getState().addToast({
+                type: 'error',
+                title: 'AI Unavailable',
+                message: err.message || 'Something went wrong while contacting the AI provider.',
+              });
             }
             
             console.error('API loop error on attempt', attempts, err);
             errorPrompt = `\nPrevious attempt failed. Please evaluate the board again and return exactly one UCI move string.`;
             if (attempts >= 3) {
-              setConnectionState('API Error');
               break;
             }
           }
@@ -210,5 +237,5 @@ export function useAIGameLoop(aiColor: 'w' | 'b' = 'b') {
     };
 
     playCloudMove();
-  }, [appState, isPaused, engineType, turn, aiColor, fen, history, isCheckmate, provider, model, apiKeys, baseUrls, organizations, temperatures, maxTokens, isConnected, makeMove, setIsThinking, retryCount]);
+  }, [appState, isPaused, engineType, turn, aiColor, fen, history, isCheckmate, provider, model, apiKeys, baseUrls, organizations, temperatures, maxTokens, isConnected, makeMove, setIsThinking, retryCount, gameId]);
 }

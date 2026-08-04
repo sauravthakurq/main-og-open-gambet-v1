@@ -10,6 +10,7 @@ import {
   Play, Pause, RotateCcw, Home, Settings, X, AlertTriangle, Monitor
 } from 'lucide-react';
 import { useAndroidBack } from '@/hooks/useAndroidBack';
+import { useToastStore } from '@/store/useToastStore';
 
 export default function GameMenuModal() {
   const { 
@@ -54,15 +55,24 @@ export default function GameMenuModal() {
 
   const executeAction = () => {
     if (confirmAction === 'restart') {
+      useEngineStore.getState().cancelAIRequest();
       resetGame();
       if (matchConfig.timeControl) {
         resetClock(matchConfig.timeControl.minutes * 60 * 1000);
       } else {
         resetClock(10 * 60 * 1000);
       }
+      useChessClockStore.getState().startClock('w');
       setIsPaused(false);
       setIsGameMenuOpen(false);
+      useToastStore.getState().addToast({
+        type: 'success',
+        title: 'Game Restarted',
+        message: 'The board has been reset.',
+        duration: 2000,
+      });
     } else if (confirmAction === 'newgame' || confirmAction === 'home') {
+      useEngineStore.getState().cancelAIRequest();
       resetGame();
       destroyEngine();
       setIsPaused(false);

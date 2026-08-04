@@ -4,6 +4,8 @@ import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { RefreshCcw, Home, AlertTriangle } from 'lucide-react';
 
+import { useToastStore } from '@/store/useToastStore';
+
 export default function Error({
   error,
   reset,
@@ -13,7 +15,15 @@ export default function Error({
 }) {
   useEffect(() => {
     // Log the error to an error reporting service
-    console.error(error);
+    console.error('[Global Error Boundary]', error);
+    
+    // Attempt to show in Toast UI if provider is still mounted
+    useToastStore.getState().addToast({
+      type: 'error',
+      title: 'Unexpected Error',
+      message: error.message || 'A critical error occurred.',
+      duration: 5000
+    });
   }, [error]);
 
   return (
