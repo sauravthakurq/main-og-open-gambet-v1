@@ -250,7 +250,7 @@ export default function GameOverModal() {
 
   if (didUserWin && !isDraw) {
     return (
-      <div className="fixed inset-0 z-30 flex items-center justify-center p-4 font-sans relative overflow-hidden selection:bg-[#e1aa53] selection:text-black">
+      <div className="fixed inset-0 z-30 flex items-center justify-center p-4 font-sans overflow-hidden selection:bg-[#e1aa53] selection:text-black">
         <CustomStyles />
         
         {/* Background glow to ground the popup */}

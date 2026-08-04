@@ -118,7 +118,7 @@ export default function Navbar() {
     setIsSoundEnabled(!isSoundEnabled);
   };
 
-  if (appState !== 'playing') {
+  if (appState !== 'playing' && appState !== 'game_over') {
     return null;
   }
 
