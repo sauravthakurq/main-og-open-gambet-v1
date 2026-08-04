@@ -173,7 +173,7 @@ export default function Navbar() {
             onClick={() => setShowSettingsMenu(true)} 
           />
           <div className="w-px h-4 bg-white/10 mx-1.5" />
-          <ProfileDropdown />
+          <ProfileDropdown onOpenSettings={() => setShowSettingsMenu(true)} />
         </div>
 
       </header>

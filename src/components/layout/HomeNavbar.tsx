@@ -194,10 +194,9 @@ export default function HomeNavbar() {
         <GambitAINavButton onClick={() => setWorkspaceOpen(true)} />
         <div className="w-px h-5 bg-white/10 mx-1 hidden sm:block" />
         
-        {/* Profile Dropdown */}
-        <ProfileDropdown />
-        
-        <SettingsModal isOpen={showSettingsMenu} onClose={() => setShowSettingsMenu(false)} />
+        {/* Settings Modal Component */}
+      <ProfileDropdown onOpenSettings={() => setShowSettingsMenu(true)} />
+      <SettingsModal isOpen={showSettingsMenu} onClose={() => setShowSettingsMenu(false)} />
         <GambitAIWorkspace />
         <LearningWorkspace />
       </div>

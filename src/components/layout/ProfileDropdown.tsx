@@ -6,12 +6,11 @@ import { useOnlineStore } from '@/store/useOnlineStore';
 import { useModalStore } from '@/store/useModalStore';
 import { User, Settings, HelpCircle, MessageSquare, Palette, LogOut } from 'lucide-react';
 
-export function ProfileDropdown() {
+export function ProfileDropdown({ onOpenSettings }: { onOpenSettings?: () => void }) {
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   
   const { firebaseUser, userProfile } = useOnlineStore();
-  const { setSettingsOpen } = useModalStore();
   
   const isLoggedIn = !!firebaseUser;
   const [isLoadingAuth, setIsLoadingAuth] = useState(false);
@@ -124,8 +123,8 @@ export function ProfileDropdown() {
                 </button>
                 <button 
                   onClick={() => {
+                    onOpenSettings?.();
                     setIsAuthOpen(false);
-                    setSettingsOpen(true);
                   }} 
                   className="flex items-center gap-3 px-3 py-2.5 hover:bg-white/10 rounded-xl transition-colors"
                 >
@@ -139,8 +138,8 @@ export function ProfileDropdown() {
                 </button>
                 <button 
                   onClick={() => {
+                    onOpenSettings?.();
                     setIsAuthOpen(false);
-                    setSettingsOpen(true); // Can route to theme tab if needed
                   }} 
                   className="flex items-center gap-3 px-3 py-2.5 hover:bg-white/10 rounded-xl transition-colors"
                 >
