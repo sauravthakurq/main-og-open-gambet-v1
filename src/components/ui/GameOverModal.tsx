@@ -266,20 +266,20 @@ export default function GameOverModal() {
 
   if (didUserWin && !isDraw) {
     return (
-      <div className="fixed inset-0 z-30 flex items-center justify-center p-4 font-sans overflow-hidden selection:bg-[#e1aa53] selection:text-black">
+      <div className="fixed inset-0 z-[100] flex items-end md:items-center justify-center md:p-4 font-sans overflow-hidden selection:bg-[#e1aa53] selection:text-black">
         <CustomStyles />
         
         {/* Background glow to ground the popup */}
-        <div className="absolute inset-0 bg-black/60 backdrop-blur-sm pointer-events-none z-0" />
+        <div className="absolute inset-0 bg-black/60 backdrop-blur-sm pointer-events-none z-0" onClick={() => setIsVisible(false)} />
         <div className="absolute w-[600px] h-[600px] bg-[#e1aa53] rounded-full blur-[150px] opacity-[0.05] pointer-events-none z-0" />
 
         {/* Main Card Container */}
         <motion.div 
-          initial={{ scale: 0.9, opacity: 0, y: 30 }}
-          animate={{ scale: 1, opacity: 1, y: 0 }}
-          exit={{ scale: 0.9, opacity: 0, y: 20 }}
-          transition={{ type: 'spring', bounce: 0.5, duration: 0.15 }}
-          className="relative w-full max-w-[420px] bg-[#0c0c0c] rounded-[2rem] border border-white/5 shadow-[0_20px_70px_-20px_rgba(225,170,83,0.15)] p-6 z-10 flex flex-col items-center backdrop-blur-xl"
+          initial={{ opacity: 0, y: "100%" }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: "100%" }}
+          transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+          className="relative w-full max-w-[420px] bg-[#0c0c0c] rounded-t-[2rem] md:rounded-[2rem] border-t md:border border-white/5 shadow-[0_-20px_70px_-20px_rgba(225,170,83,0.15)] md:shadow-[0_20px_70px_-20px_rgba(225,170,83,0.15)] p-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))] md:pb-6 z-10 flex flex-col items-center backdrop-blur-xl"
         >
           
           {/* Subtle inner top glow for 3D depth */}
@@ -481,7 +481,7 @@ export default function GameOverModal() {
   }
 
   return (
-    <div className="fixed inset-0 z-30 flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-[100] flex items-end md:items-center justify-center md:p-4">
       {/* Dim Overlay with Blur */}
       <motion.div 
         initial={{ opacity: 0, backdropFilter: 'blur(0px)' }}
@@ -489,6 +489,7 @@ export default function GameOverModal() {
         exit={{ opacity: 0, backdropFilter: 'blur(0px)' }}
         transition={{ duration: 0.15 }}
         className="absolute inset-0 bg-black/60"
+        onClick={() => setIsVisible(false)}
       />
 
       {/* Vignette */}
@@ -496,16 +497,14 @@ export default function GameOverModal() {
 
       {/* Modal Content */}
       <motion.div 
-        initial={{ scale: 0.9, opacity: 0, y: 30, rotate: (!didUserWin && !isDraw) ? -3 : 0 }}
+        initial={{ y: "100%", opacity: 0 }}
         animate={{ 
-          scale: 1, 
+          y: 0, 
           opacity: 1, 
-          y: 0,
-          rotate: 0
         }}
-        exit={{ scale: 0.9, opacity: 0, y: 20 }}
-        transition={{ type: 'spring', bounce: 0.6, duration: 0.15 }}
-        className={`relative w-full max-w-[420px] overflow-hidden rounded-3xl border-2 bg-gradient-to-b ${themeColor} backdrop-blur-3xl p-8 z-10 flex flex-col items-center`}
+        exit={{ y: "100%", opacity: 0 }}
+        transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+        className={`relative w-full max-w-[420px] overflow-hidden rounded-t-[2rem] md:rounded-3xl border-t md:border-2 bg-gradient-to-b ${themeColor} backdrop-blur-3xl p-6 md:p-8 pb-[calc(1.5rem+env(safe-area-inset-bottom))] md:pb-8 z-10 flex flex-col items-center shadow-[0_-20px_60px_rgba(0,0,0,0.5)] md:shadow-none`}
       >
         <div className={`absolute inset-0 bg-[radial-gradient(circle_at_top,${glowColor},transparent_60%)] pointer-events-none mix-blend-screen`} />
 

@@ -137,7 +137,7 @@ export default function Home() {
         <div className="flex-1 flex flex-col h-full w-full relative bg-transparent overflow-hidden pb-[env(safe-area-inset-bottom)] pt-[env(safe-area-inset-top)]">
           <Navbar />
           
-          <main className="flex-1 flex flex-col lg:flex-row overflow-y-auto lg:overflow-hidden p-3 sm:p-4 lg:p-6 pt-[70px] sm:pt-[76px] lg:pt-[80px] pb-[calc(1rem+env(safe-area-inset-bottom))] gap-4 lg:gap-6 w-full max-w-[1800px] mx-auto">
+          <main className="flex-1 flex flex-col lg:flex-row overflow-y-auto lg:overflow-hidden p-3 sm:p-4 lg:p-6 pt-3 sm:pt-[80px] lg:pt-[80px] pb-[96px] sm:pb-[calc(1rem+env(safe-area-inset-bottom))] gap-4 lg:gap-6 w-full max-w-[1800px] mx-auto">
             
             {/* Left Column: Player Workspace (Desktop) / Top & Bottom (Mobile) */}
             <aside className="flex flex-col gap-4 lg:h-full w-full lg:w-[320px] shrink-0 order-1 lg:order-1">
@@ -299,7 +299,7 @@ export default function Home() {
                     <div className="w-full flex justify-center pt-3 pb-1">
                       <div className="w-12 h-1.5 bg-white/20 rounded-full" />
                     </div>
-                    <div className="flex-1 overflow-y-auto px-4 pb-10">
+                    <div className="flex-1 overflow-y-auto px-4 pb-[calc(3rem+env(safe-area-inset-bottom))]">
                       <RightSidebar showSettings={showSettings} setShowSettings={setShowSettings} />
                     </div>
                   </motion.div>

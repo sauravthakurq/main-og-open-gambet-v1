@@ -155,4 +155,5 @@ export interface LeaderboardEntry {
   draws: number;
   gamesPlayed: number;
   country: string | null;
+  online?: boolean;
 }

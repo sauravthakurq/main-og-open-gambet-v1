@@ -124,43 +124,46 @@ export default function Navbar() {
 
   return (
     <>
-      {/* Solid black navbar - no blur, no transparency */}
-      <header className="fixed top-0 left-0 w-full h-[56px] flex items-center justify-between px-5 z-40 bg-[#0a0a0a] border-b border-white/[0.06]">
+      {/* 
+        Desktop Navbar (sm:up) 
+        Fixed to TOP
+      */}
+      <header className="hidden sm:flex fixed top-0 left-0 w-full h-[60px] lg:h-[64px] items-center justify-between px-5 sm:px-6 z-40 bg-[#0a0a0a]/95 backdrop-blur-xl border-b border-white/[0.06] shadow-sm pt-[env(safe-area-inset-top)]">
         
         {/* Left: Logo + Brand */}
         <div className="flex items-center gap-3 w-1/3">
           <img 
             src="/logo.png" 
             alt="Logo" 
-            className="w-10 h-10 object-contain cursor-pointer hover:opacity-80 transition-opacity shrink-0" 
+            className="w-9 h-9 object-contain cursor-pointer hover:opacity-80 transition-opacity shrink-0" 
             draggable={false} 
             onClick={() => setIsGameMenuOpen(true)}
           />
-          <div className="hidden sm:flex flex-col">
-            <span className="text-[16px] font-bold text-white leading-none tracking-wide">Open Gambit</span>
-            <span className="text-[10px] font-semibold text-[#b58863] uppercase tracking-[0.15em] leading-none mt-[3px]">CHESS AI</span>
+          <div className="flex flex-col">
+            <span className="text-[15px] font-black text-white leading-none tracking-tight">Open Gambit</span>
+            <span className="text-[9px] font-bold text-[var(--color-accent)] uppercase tracking-[0.2em] leading-none mt-1">CHESS AI</span>
           </div>
         </div>
 
         {/* Center: Controls Pill */}
         <div className="flex items-center justify-center w-1/3">
-          <div className="flex items-center bg-white/5 rounded-2xl border border-white/8 px-1 py-1 gap-0.5">
+          <div className="flex items-center bg-white/5 rounded-2xl border border-white/10 p-1 gap-1 shadow-inner">
             <NavButton icon={RotateCcw} label="Undo" onClick={undoMove} />
             <NavButton icon={RotateCw} label="Redo" onClick={redoMove} />
-            <div className="w-px h-4 bg-white/10 mx-1" />
+            <div className="w-px h-5 bg-white/10 mx-1" />
             <NavButton icon={Home} label="Game Menu" onClick={() => setIsGameMenuOpen(true)} />
             <NavButton icon={RefreshCcw} label="Flip Board" onClick={flipBoard} />
           </div>
         </div>
 
         {/* Right: App Controls */}
-        <div className="flex items-center justify-end gap-0.5 w-1/3">
+        <div className="flex items-center justify-end gap-1 w-1/3">
           <NavButton icon={GraduationCap} label="Learn" onClick={() => {
             const store = useLearningStore.getState();
             store.setWorkspaceOpen(!store.isWorkspaceOpen);
           }} />
           <GambitAINavButton onClick={() => setWorkspaceOpen(true)} />
-          <div className="w-px h-4 bg-white/10 mx-1.5" />
+          <div className="w-px h-5 bg-white/10 mx-2" />
           <NavButton 
             icon={isFullscreen ? Minimize : Maximize} 
             label={isFullscreen ? "Exit Fullscreen" : "Fullscreen"} 
@@ -172,10 +175,60 @@ export default function Navbar() {
             label="Settings" 
             onClick={() => setShowSettingsMenu(true)} 
           />
-          <div className="w-px h-4 bg-white/10 mx-1.5" />
+          <div className="w-px h-5 bg-white/10 mx-2" />
           <ProfileDropdown onOpenSettings={() => setShowSettingsMenu(true)} />
         </div>
+      </header>
 
+      {/* 
+        Mobile Navbar (xs) 
+        Fixed to BOTTOM
+      */}
+      <header className="flex sm:hidden fixed bottom-0 left-0 w-full items-center justify-between px-2 pb-[env(safe-area-inset-bottom)] pt-2 z-50 bg-[#0a0a0a]/90 backdrop-blur-xl border-t border-white/[0.08] shadow-[0_-8px_32px_rgba(0,0,0,0.4)]">
+        <div className="flex items-center justify-between w-full max-w-[400px] mx-auto pb-2">
+          
+          <button 
+            onClick={() => setIsGameMenuOpen(true)}
+            className="flex flex-col items-center justify-center w-14 h-12 text-white/50 hover:text-white transition-colors"
+          >
+            <Home size={22} strokeWidth={2} />
+            <span className="text-[9px] font-bold mt-1 tracking-wider uppercase">Menu</span>
+          </button>
+          
+          <button 
+            onClick={undoMove}
+            className="flex flex-col items-center justify-center w-14 h-12 text-white/50 hover:text-white transition-colors"
+          >
+            <RotateCcw size={22} strokeWidth={2} />
+            <span className="text-[9px] font-bold mt-1 tracking-wider uppercase">Undo</span>
+          </button>
+          
+          <div className="relative -top-6">
+            <button
+              onClick={() => setWorkspaceOpen(true)}
+              className="w-16 h-16 rounded-full bg-gradient-to-br from-[var(--color-accent)] to-[#8a7a6a] border-4 border-[#0a0a0a] shadow-[0_4px_24px_var(--color-accent-dim)] flex items-center justify-center transition-transform active:scale-95"
+            >
+              <Orb theme="cloud" size={40} state={useGambitAIStore.getState().orbState === 'idle' ? 'thinking' : useGambitAIStore.getState().orbState} />
+            </button>
+          </div>
+
+          <button 
+            onClick={flipBoard}
+            className="flex flex-col items-center justify-center w-14 h-12 text-white/50 hover:text-white transition-colors"
+          >
+            <RefreshCcw size={22} strokeWidth={2} />
+            <span className="text-[9px] font-bold mt-1 tracking-wider uppercase">Flip</span>
+          </button>
+          
+          <button 
+            onClick={() => setShowSettingsMenu(true)}
+            className="flex flex-col items-center justify-center w-14 h-12 text-white/50 hover:text-white transition-colors"
+          >
+            <Settings size={22} strokeWidth={2} />
+            <span className="text-[9px] font-bold mt-1 tracking-wider uppercase">Settings</span>
+          </button>
+
+        </div>
       </header>
 
       <SettingsModal 

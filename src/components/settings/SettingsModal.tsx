@@ -32,7 +32,7 @@ export const SettingsModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: (
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-8">
+        <div className="fixed inset-0 z-[100] flex items-end md:items-center justify-center md:p-8">
           {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
@@ -44,37 +44,42 @@ export const SettingsModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: (
 
           {/* Modal Container */}
           <motion.div
-            initial={{ scale: 0.95, opacity: 0, y: 20 }}
-            animate={{ scale: 1, opacity: 1, y: 0 }}
-            exit={{ scale: 0.95, opacity: 0, y: 20 }}
-            transition={{ type: 'spring', bounce: 0.3, duration: 0.15 }}
-            className="relative w-full max-w-[1200px] h-[85vh] max-h-[850px] m-auto bg-[#0c0c0c]/95 border border-white/10 rounded-[2rem] shadow-[0_30px_100px_-20px_rgba(0,0,0,1)] overflow-hidden flex flex-col md:flex-row backdrop-blur-2xl"
+            initial={{ y: '100%' }}
+            animate={{ y: 0 }}
+            exit={{ y: '100%' }}
+            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+            className="relative w-full max-w-[1200px] h-[92vh] md:h-[85vh] max-h-[850px] mx-auto md:m-auto bg-[#0c0c0c]/95 border-t md:border border-white/10 rounded-t-[2rem] md:rounded-[2rem] shadow-[0_-20px_60px_-15px_rgba(0,0,0,0.8)] md:shadow-[0_30px_100px_-20px_rgba(0,0,0,1)] overflow-hidden flex flex-col md:flex-row backdrop-blur-2xl"
           >
-            {/* Close Button */}
+            {/* Mobile Drag Handle */}
+            <div className="w-full h-8 flex justify-center items-center md:hidden shrink-0" onClick={onClose}>
+              <div className="w-12 h-1.5 bg-white/20 rounded-full" />
+            </div>
+
+            {/* Close Button (Desktop Only) */}
             <button
               onClick={onClose}
-              className="absolute top-4 right-4 z-50 p-2 rounded-full bg-white/5 hover:bg-white/10 text-white/50 hover:text-white transition-colors"
+              className="absolute top-4 right-4 z-50 p-2 rounded-full bg-white/5 hover:bg-white/10 text-white/50 hover:text-white transition-colors hidden md:block"
             >
               <X size={20} />
             </button>
 
-            {/* Sidebar */}
-            <div className="w-full md:w-64 bg-black/40 border-r border-white/5 flex flex-col shrink-0 p-4 pt-16 md:pt-8 overflow-y-auto custom-scrollbar">
-              <h2 className="text-white/40 text-[10px] font-bold tracking-[0.2em] uppercase mb-4 px-4">Settings</h2>
+            {/* Sidebar / Tabs */}
+            <div className="w-full md:w-64 bg-black/40 border-b md:border-b-0 md:border-r border-white/5 flex flex-row md:flex-col shrink-0 p-2 md:p-4 md:pt-8 overflow-x-auto md:overflow-y-auto custom-scrollbar no-scrollbar">
+              <h2 className="hidden md:block text-white/40 text-[10px] font-bold tracking-[0.2em] uppercase mb-4 px-4">Settings</h2>
               
-              <div className="flex flex-col gap-1">
+              <div className="flex flex-row md:flex-col gap-1 md:gap-1 px-2 md:px-0 min-w-max md:min-w-0">
                 {TABS.map((tab) => (
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id as SettingsTabId)}
-                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-sm font-medium ${
+                    className={`flex items-center gap-2 md:gap-3 px-4 md:px-4 py-2.5 md:py-3 rounded-full md:rounded-xl transition-all text-sm font-medium ${
                       activeTab === tab.id
                         ? 'bg-[var(--color-accent)] text-black shadow-lg shadow-[var(--color-accent)]/20'
-                        : 'text-white/60 hover:text-white hover:bg-white/5'
+                        : 'text-white/60 hover:text-white hover:bg-white/5 bg-white/5 md:bg-transparent'
                     }`}
                   >
-                    <tab.icon size={18} />
-                    {tab.label}
+                    <tab.icon size={16} className="md:w-[18px] md:h-[18px]" />
+                    <span className="whitespace-nowrap">{tab.label}</span>
                   </button>
                 ))}
               </div>

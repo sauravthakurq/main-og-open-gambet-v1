@@ -22,7 +22,7 @@ export default function PlayerCard({ type, color, provider, model, engineType, i
   const { account } = useSettingsStore();
   
   return (
-    <motion.div whileHover={{ scale: 1.01 }} className={`${displayClass} p-4 lg:p-5 rounded-2xl border border-white/[0.06] bg-gradient-to-b from-white/[0.04] to-black/30 backdrop-blur-3xl shadow-[0_8px_32px_rgba(0,0,0,0.5)] transition-all relative overflow-hidden flex flex-col justify-between min-h-[155px]`}>
+    <motion.div whileHover={{ scale: 1.01 }} className={`${displayClass} p-3 lg:p-5 rounded-2xl border border-white/[0.06] bg-gradient-to-b from-white/[0.04] to-black/30 backdrop-blur-3xl shadow-[0_8px_32px_rgba(0,0,0,0.5)] transition-all relative overflow-hidden flex flex-col justify-between min-h-[110px] lg:min-h-[155px] mx-auto`}>
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(255,255,255,0.02),transparent_50%)] pointer-events-none"></div>
       <div className="flex items-start justify-between gap-3 mb-2 relative z-10">
         <div className="flex items-center gap-3 min-w-0 flex-1">
