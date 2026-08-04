@@ -59,7 +59,7 @@ export default function GameOverModal() {
   const { setAppState, matchConfig } = useAppStore();
   const { whiteTime, blackTime, stopClock } = useChessClockStore();
   const [isVisible, setIsVisible] = useState(false);
-  useAndroidBack(() => {
+  useAndroidBack('game-over-modal', () => {
     if (isVisible) setIsVisible(false);
   }, isVisible);
   const [isShining, setIsShining] = useState(false);
