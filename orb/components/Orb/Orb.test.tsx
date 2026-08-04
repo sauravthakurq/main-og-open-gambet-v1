@@ -1,0 +1,169 @@
+import { renderToStaticMarkup } from 'react-dom/server'
+import { describe, expect, it, vi } from 'vitest'
+import { Orb } from './Orb'
+import { deriveOrbState, deriveOrbVolume } from './signals'
+import type { OrbAdapter, OrbSignal } from './Orb.types'
+
+function createAdapter(): OrbAdapter {
+  return {
+    subscribe: () => () => {},
+    start: vi.fn(),
+    stop: vi.fn(),
+  }
+}
+
+describe('Orb accessibility', () => {
+  it('renders clickable circle theme as a labelled button with forwarded attributes', () => {
+    const html = renderToStaticMarkup(
+      <Orb
+        adapter={createAdapter()}
+        theme="circle"
+        id="voice-orb"
+        aria-label="Start voice assistant"
+        disabled
+      />,
+    )
+
+    expect(html).toContain('<button')
+    expect(html).toContain('type="button"')
+    expect(html).toContain('id="voice-orb"')
+    expect(html).toContain('aria-label="Start voice assistant"')
+    expect(html).toContain('disabled')
+    expect(html).not.toContain('<div')
+  })
+
+  it('renders clickable bars theme as a labelled button with forwarded attributes', () => {
+    const html = renderToStaticMarkup(
+      <Orb
+        adapter={createAdapter()}
+        theme="bars"
+        id="bars-orb"
+        aria-label="Start voice assistant"
+      />,
+    )
+
+    expect(html).toContain('<button')
+    expect(html).toContain('type="button"')
+    expect(html).toContain('id="bars-orb"')
+    expect(html).toContain('aria-label="Start voice assistant"')
+    expect(html).not.toContain('<div')
+  })
+
+  it('renders the cloud theme as a passive visual when interaction is external', () => {
+    const html = renderToStaticMarkup(
+      <Orb adapter={createAdapter()} theme="cloud" interactive={false} data-testid="cloud-orb" />,
+    )
+
+    expect(html).toContain('<canvas')
+    expect(html).toContain('data-testid="cloud-orb"')
+    expect(html).not.toContain('<button')
+  })
+
+  it('renders a solid launch layer before the cloud surface fades in', () => {
+    const html = renderToStaticMarkup(<Orb state="listening" theme="cloud" />)
+
+    expect(html).toContain('data-cloud-launch-dot=""')
+    expect(html).toContain('background:#5659dc')
+  })
+
+  it('renders the radial artwork with a dedicated phone control', () => {
+    const html = renderToStaticMarkup(
+      <Orb
+        adapter={createAdapter()}
+        theme="radial"
+        id="radial-control"
+        aria-label="Start radial voice assistant"
+      />,
+    )
+
+    expect(html).toContain('<canvas')
+    expect(html).toContain('data-radial-surface=""')
+    expect(html).toContain('data-radial-control=""')
+    expect(html).toContain('id="radial-control"')
+    expect(html).toContain('aria-label="Start radial voice assistant"')
+    expect(html).toContain('background:#080808')
+  })
+
+  it('keeps the radial artwork passive when interaction is external', () => {
+    const html = renderToStaticMarkup(
+      <Orb adapter={createAdapter()} theme="radial" interactive={false} />,
+    )
+
+    expect(html).toContain('<canvas')
+    expect(html).not.toContain('data-radial-control')
+    expect(html).not.toContain('<button')
+  })
+
+  it('lets radial controls match the surrounding application surface', () => {
+    const html = renderToStaticMarkup(
+      <Orb
+        adapter={createAdapter()}
+        theme="radial"
+        style={{ '--orb-ui-radial-control-surround': '#101010' }}
+      />,
+    )
+
+    expect(html).toContain('--orb-ui-radial-control-surround:#101010')
+    expect(html).toContain('var(--orb-ui-radial-control-surround)')
+  })
+
+  it('preserves consumer style overrides on clickable themes', () => {
+    const html = renderToStaticMarkup(
+      <Orb
+        adapter={createAdapter()}
+        theme="circle"
+        aria-label="Start voice assistant"
+        style={{ border: '1px solid red', padding: 8 }}
+      />,
+    )
+
+    expect(html).toContain('border:1px solid red')
+    expect(html).toContain('padding:8px')
+  })
+
+  it('does not forward internal interactive props to the debug DOM node', () => {
+    const html = renderToStaticMarkup(<Orb adapter={createAdapter()} theme="debug" />)
+
+    expect(html).not.toContain('interactive=')
+  })
+
+  it('renders controlled signal state and output volume', () => {
+    const html = renderToStaticMarkup(
+      <Orb signal={{ state: 'speaking', outputVolume: 0.72 }} theme="debug" />,
+    )
+
+    expect(html).toContain('speaking')
+    expect(html).toContain('0.72')
+  })
+
+  it('lets scalar controlled props override signal values', () => {
+    const html = renderToStaticMarkup(
+      <Orb signal={{ state: 'speaking', outputVolume: 0.72 }} state="listening" volume={0.4} />,
+    )
+
+    expect(html).toContain('listening')
+    expect(html).toContain('0.40')
+  })
+
+  it('renders thinking state in every theme', () => {
+    expect(renderToStaticMarkup(<Orb state="thinking" theme="debug" />)).toContain('thinking')
+    expect(renderToStaticMarkup(<Orb state="thinking" theme="circle" />)).toContain('<div')
+    expect(renderToStaticMarkup(<Orb state="thinking" theme="bars" />)).toContain('<div')
+    expect(renderToStaticMarkup(<Orb state="thinking" theme="cloud" />)).toContain('<canvas')
+    expect(renderToStaticMarkup(<Orb state="thinking" theme="radial" />)).toContain('<canvas')
+  })
+})
+
+describe('Orb signal helpers', () => {
+  it('derives state and volume with controlled prop precedence', () => {
+    const adapterSignal: OrbSignal = { state: 'speaking', outputVolume: 0.9 }
+
+    expect(deriveOrbState(undefined, undefined, adapterSignal)).toBe('speaking')
+    expect(deriveOrbState('listening', { state: 'speaking' }, adapterSignal)).toBe('listening')
+    expect(deriveOrbVolume(undefined, 'speaking', adapterSignal)).toBe(0.9)
+    expect(deriveOrbVolume(undefined, 'listening', { state: 'listening', inputVolume: 0.3 })).toBe(
+      0.3,
+    )
+    expect(deriveOrbVolume(0.4, 'speaking', adapterSignal)).toBe(0.4)
+  })
+})
