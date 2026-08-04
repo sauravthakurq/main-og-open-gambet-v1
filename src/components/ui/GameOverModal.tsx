@@ -7,6 +7,7 @@ import { useAppStore } from '@/store/useAppStore';
 import { useChessClockStore } from '@/store/useChessClockStore';
 import { Trophy, RefreshCcw, LogOut, Download, Activity, X, Skull, Handshake, Timer, Flag, Scale, Target, Clock, RotateCcw, Crown, Sparkles, Eye, Home } from 'lucide-react';
 import { audioManager } from '@/lib/audioManager';
+import { useAndroidBack } from '@/hooks/useAndroidBack';
 
 const ChessKnightIcon = ({ className }: { className?: string }) => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className={className}>
@@ -58,6 +59,9 @@ export default function GameOverModal() {
   const { setAppState, matchConfig } = useAppStore();
   const { whiteTime, blackTime, stopClock } = useChessClockStore();
   const [isVisible, setIsVisible] = useState(false);
+  useAndroidBack(() => {
+    if (isVisible) setIsVisible(false);
+  }, isVisible);
   const [isShining, setIsShining] = useState(false);
 
   useEffect(() => {
@@ -246,7 +250,7 @@ export default function GameOverModal() {
 
   if (didUserWin && !isDraw) {
     return (
-      <div className="fixed inset-0 z-[999] flex items-center justify-center p-4 font-sans relative overflow-hidden selection:bg-[#e1aa53] selection:text-black">
+      <div className="fixed inset-0 z-30 flex items-center justify-center p-4 font-sans relative overflow-hidden selection:bg-[#e1aa53] selection:text-black">
         <CustomStyles />
         
         {/* Background glow to ground the popup */}
@@ -258,7 +262,7 @@ export default function GameOverModal() {
           initial={{ scale: 0.9, opacity: 0, y: 30 }}
           animate={{ scale: 1, opacity: 1, y: 0 }}
           exit={{ scale: 0.9, opacity: 0, y: 20 }}
-          transition={{ type: 'spring', bounce: 0.5, duration: 0.7 }}
+          transition={{ type: 'spring', bounce: 0.5, duration: 0.15 }}
           className="relative w-full max-w-[420px] bg-[#0c0c0c] rounded-[2rem] border border-white/5 shadow-[0_20px_70px_-20px_rgba(225,170,83,0.15)] p-6 z-10 flex flex-col items-center backdrop-blur-xl"
         >
           
@@ -270,7 +274,7 @@ export default function GameOverModal() {
           {/* Close Button */}
           <button 
             onClick={() => setIsVisible(false)}
-            className="absolute top-5 right-5 w-8 h-8 rounded-full border border-white/5 flex items-center justify-center text-gray-500 hover:text-white hover:bg-white/10 hover:border-white/20 transition-all duration-300 z-20"
+            className="absolute top-5 right-5 w-8 h-8 rounded-full border border-white/5 flex items-center justify-center text-gray-500 hover:text-white hover:bg-white/10 hover:border-white/20 transition-all duration-150 z-20"
           >
             <X size={16} strokeWidth={2.5} />
           </button>
@@ -279,12 +283,12 @@ export default function GameOverModal() {
           <div className="relative mt-6 mb-4 flex justify-center items-center w-full">
             
             {/* Animated Wreaths */}
-            <LaurelWreath className={`w-28 h-52 absolute left-2 -top-6 text-[#e1aa53] transition-all duration-500 ${isShining ? '-translate-x-2 -rotate-2 opacity-100' : 'opacity-80'}`} />
-            <LaurelWreath className={`w-28 h-52 absolute right-2 -top-6 text-[#e1aa53] transition-all duration-500 ${isShining ? 'translate-x-2 rotate-2 opacity-100' : 'opacity-80'}`} flipped />
+            <LaurelWreath className={`w-28 h-52 absolute left-2 -top-6 text-[#e1aa53] transition-all duration-150 ${isShining ? '-translate-x-2 -rotate-2 opacity-100' : 'opacity-80'}`} />
+            <LaurelWreath className={`w-28 h-52 absolute right-2 -top-6 text-[#e1aa53] transition-all duration-150 ${isShining ? 'translate-x-2 rotate-2 opacity-100' : 'opacity-80'}`} flipped />
             
             {/* Core Trophy Element */}
             <div className="relative z-10 animate-float">
-              <div className={`relative text-[110px] leading-none select-none filter transition-all duration-500 ${isShining ? 'drop-shadow-[0_0_35px_rgba(225,170,83,0.9)] scale-105' : 'drop-shadow-[0_15px_20px_rgba(225,170,83,0.4)] scale-100'}`}>
+              <div className={`relative text-[110px] leading-none select-none filter transition-all duration-150 ${isShining ? 'drop-shadow-[0_0_35px_rgba(225,170,83,0.9)] scale-105' : 'drop-shadow-[0_15px_20px_rgba(225,170,83,0.4)] scale-100'}`}>
                 <span 
                   className={isShining ? 'text-shine-active' : ''}
                   style={{ 
@@ -301,11 +305,11 @@ export default function GameOverModal() {
               
               {/* Auto Sparkles */}
               <Sparkles 
-                className={`absolute -top-4 -right-4 w-8 h-8 text-yellow-300 transition-all duration-500 ${isShining ? 'scale-100 opacity-100 rotate-12' : 'scale-0 opacity-0'}`} 
+                className={`absolute -top-4 -right-4 w-8 h-8 text-yellow-300 transition-all duration-150 ${isShining ? 'scale-100 opacity-100 rotate-12' : 'scale-0 opacity-0'}`} 
                 strokeWidth={1.5}
               />
               <Sparkles 
-                className={`absolute top-10 -left-6 w-5 h-5 text-yellow-100 transition-all duration-500 delay-75 ${isShining ? 'scale-100 opacity-80 -rotate-12' : 'scale-0 opacity-0'}`} 
+                className={`absolute top-10 -left-6 w-5 h-5 text-yellow-100 transition-all duration-150 delay-75 ${isShining ? 'scale-100 opacity-80 -rotate-12' : 'scale-0 opacity-0'}`} 
                 strokeWidth={2}
               />
             </div>
@@ -338,7 +342,7 @@ export default function GameOverModal() {
 
           {/* Stats Grid */}
           <div className="grid grid-cols-2 gap-3 w-full mb-6 z-10">
-            <div className="bg-[#111111] border border-white/5 hover:border-white/10 hover:bg-[#161616] transition-colors duration-300 rounded-2xl p-4 flex items-center gap-3 group">
+            <div className="bg-[#111111] border border-white/5 hover:border-white/10 hover:bg-[#161616] transition-colors duration-150 rounded-2xl p-4 flex items-center gap-3 group">
               <div className="w-11 h-11 rounded-full bg-gradient-to-br from-[#2a2416] to-[#120f09] border border-[#3d3320] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
                 <Target size={20} className="text-[#e1aa53]" />
               </div>
@@ -348,7 +352,7 @@ export default function GameOverModal() {
               </div>
             </div>
 
-            <div className="bg-[#111111] border border-white/5 hover:border-white/10 hover:bg-[#161616] transition-colors duration-300 rounded-2xl p-4 flex items-center gap-3 group">
+            <div className="bg-[#111111] border border-white/5 hover:border-white/10 hover:bg-[#161616] transition-colors duration-150 rounded-2xl p-4 flex items-center gap-3 group">
               <div className="w-11 h-11 rounded-full bg-gradient-to-br from-[#2a2416] to-[#120f09] border border-[#3d3320] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
                 <ChessKnightIcon className="w-5 h-5 text-[#e1aa53]" />
               </div>
@@ -358,7 +362,7 @@ export default function GameOverModal() {
               </div>
             </div>
 
-            <div className="bg-[#111111] border border-white/5 hover:border-white/10 hover:bg-[#161616] transition-colors duration-300 rounded-2xl p-4 flex items-center gap-3 group">
+            <div className="bg-[#111111] border border-white/5 hover:border-white/10 hover:bg-[#161616] transition-colors duration-150 rounded-2xl p-4 flex items-center gap-3 group">
               <div className="w-11 h-11 rounded-full bg-gradient-to-br from-[#222] to-[#111] border border-[#333] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
                 <Clock size={20} className="text-gray-300" />
               </div>
@@ -368,7 +372,7 @@ export default function GameOverModal() {
               </div>
             </div>
 
-            <div className="bg-[#111111] border border-white/5 hover:border-white/10 hover:bg-[#161616] transition-colors duration-300 rounded-2xl p-4 flex items-center gap-3 group">
+            <div className="bg-[#111111] border border-white/5 hover:border-white/10 hover:bg-[#161616] transition-colors duration-150 rounded-2xl p-4 flex items-center gap-3 group">
               <div className="w-11 h-11 rounded-full bg-gradient-to-br from-[#222] to-[#111] border border-[#333] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
                 <Clock size={20} className="text-gray-300" />
               </div>
@@ -381,19 +385,19 @@ export default function GameOverModal() {
 
           {/* Action Buttons */}
           <div className="flex gap-3 w-full mb-7 z-10">
-            <button onClick={handleRestart} className="flex-1 bg-transparent border border-white/10 hover:bg-white/5 hover:border-white/20 transition-all duration-300 rounded-xl py-4 flex items-center justify-center gap-2 text-gray-300 hover:text-white font-semibold text-sm group">
-              <RotateCcw size={18} className="group-hover:-rotate-90 transition-transform duration-500" />
+            <button onClick={handleRestart} className="flex-1 bg-transparent border border-white/10 hover:bg-white/5 hover:border-white/20 transition-all duration-150 rounded-xl py-4 flex items-center justify-center gap-2 text-gray-300 hover:text-white font-semibold text-sm group">
+              <RotateCcw size={18} className="group-hover:-rotate-90 transition-transform duration-150" />
               Rematch
             </button>
             
             <button 
               onClick={handleNewGame}
-              className="flex-1 rounded-xl py-4 flex items-center justify-center gap-2 text-black font-bold text-sm relative overflow-hidden transition-all duration-300 hover:scale-[1.03] active:scale-[0.98] shadow-[0_10px_20px_-10px_rgba(225,170,83,0.5)] hover:shadow-[0_15px_30px_-10px_rgba(225,170,83,0.7)] group"
+              className="flex-1 rounded-xl py-4 flex items-center justify-center gap-2 text-black font-bold text-sm relative overflow-hidden transition-all duration-150 hover:scale-[1.03] active:scale-[0.98] shadow-[0_10px_20px_-10px_rgba(225,170,83,0.5)] hover:shadow-[0_15px_30px_-10px_rgba(225,170,83,0.7)] group"
               style={{
                 background: 'linear-gradient(135deg, #e5b65c 0%, #fad77b 50%, #c78d2e 100%)'
               }}
             >
-              <div className="absolute inset-0 opacity-[0.08] group-hover:scale-110 transition-transform duration-700" style={{
+              <div className="absolute inset-0 opacity-[0.08] group-hover:scale-110 transition-transform duration-300" style={{
                 backgroundImage: 'linear-gradient(45deg, #000 25%, transparent 25%, transparent 75%, #000 75%, #000), linear-gradient(45deg, #000 25%, transparent 25%, transparent 75%, #000 75%, #000)',
                 backgroundSize: '16px 16px',
                 backgroundPosition: '0 0, 8px 8px'
@@ -461,13 +465,13 @@ export default function GameOverModal() {
   }
 
   return (
-    <div className="fixed inset-0 z-[999] flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-30 flex items-center justify-center p-4">
       {/* Dim Overlay with Blur */}
       <motion.div 
         initial={{ opacity: 0, backdropFilter: 'blur(0px)' }}
         animate={{ opacity: 1, backdropFilter: 'blur(12px)' }}
         exit={{ opacity: 0, backdropFilter: 'blur(0px)' }}
-        transition={{ duration: 0.6 }}
+        transition={{ duration: 0.15 }}
         className="absolute inset-0 bg-black/60"
       />
 
@@ -484,7 +488,7 @@ export default function GameOverModal() {
           rotate: 0
         }}
         exit={{ scale: 0.9, opacity: 0, y: 20 }}
-        transition={{ type: 'spring', bounce: 0.6, duration: 0.7 }}
+        transition={{ type: 'spring', bounce: 0.6, duration: 0.15 }}
         className={`relative w-full max-w-[420px] overflow-hidden rounded-3xl border-2 bg-gradient-to-b ${themeColor} backdrop-blur-3xl p-8 z-10 flex flex-col items-center`}
       >
         <div className={`absolute inset-0 bg-[radial-gradient(circle_at_top,${glowColor},transparent_60%)] pointer-events-none mix-blend-screen`} />

@@ -62,7 +62,7 @@ export const AIChat = () => {
   };
 
   return (
-    <div className="w-full h-full flex flex-col pt-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+    <div className="w-full h-full flex flex-col pt-8 animate-in fade-in slide-in-from-bottom-4 duration-150">
       
       {/* Header */}
       <div className="px-8 pb-6 border-b border-white/5 shrink-0 flex items-center justify-between">

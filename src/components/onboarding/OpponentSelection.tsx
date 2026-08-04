@@ -105,7 +105,7 @@ function PremiumSurface({ mode, index, onSelect }: { mode: typeof MODES[number],
       initial={{ opacity: 0, y: 30, filter: 'blur(10px)' }}
       animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
       transition={{ 
-        duration: 0.7, 
+        duration: 0.15, 
         delay: index * 0.1, 
         type: 'spring', 
         bounce: 0.4 
@@ -127,7 +127,7 @@ function PremiumSurface({ mode, index, onSelect }: { mode: typeof MODES[number],
       >
         {/* Background Image */}
         <div 
-          className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
+          className="absolute inset-0 bg-cover bg-center transition-transform duration-300 group-hover:scale-110"
           style={{ backgroundImage: `url("${mode.image}")` }}
         />
         
@@ -185,7 +185,7 @@ export default function OpponentSelection({ onSelect }: OpponentSelectionProps) 
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+        transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}
         className="mb-8 relative text-center"
       >
         <h1 className="text-[40px] font-[700] tracking-tight text-[#F5F5F7] mb-3 drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">

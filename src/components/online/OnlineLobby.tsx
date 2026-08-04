@@ -161,7 +161,7 @@ export default function OnlineLobby({ onBack }: OnlineLobbyProps) {
                   onClick={() => handleGatedAction(() => setView('quickmatch'))}
                   className="group relative w-full rounded-3xl p-6 bg-gradient-to-br from-white/5 to-transparent border border-white/10 hover:border-[var(--color-accent)]/50 transition-all flex items-center justify-between overflow-hidden shadow-xl hover:shadow-[0_8px_32px_var(--color-accent-dim)] hover:-translate-y-1 active:translate-y-0"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-r from-[var(--color-accent)]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-[var(--color-accent)]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-150" />
                   
                   <div className="flex items-center gap-5 relative z-10">
                     <div className="w-16 h-16 rounded-2xl bg-[var(--color-accent)]/20 border border-[var(--color-accent)]/30 flex items-center justify-center shadow-inner group-hover:scale-110 transition-transform">

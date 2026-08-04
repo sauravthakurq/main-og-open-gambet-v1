@@ -238,7 +238,7 @@ export const LearningDocsView = () => {
   const activeSection = useScrollSpy(['setup', 'pieces', 'special', 'first-move', 'win', 'strategy', 'practice']);
 
   return (
-    <div className="absolute inset-0 z-[60] bg-[#0a0a0c] text-zinc-100 font-sans font-normal antialiased overflow-hidden flex animate-in fade-in slide-in-from-bottom-8 duration-500">
+    <div className="absolute inset-0 z-[60] bg-[#0a0a0c] text-zinc-100 font-sans font-normal antialiased overflow-hidden flex animate-in fade-in slide-in-from-bottom-8 duration-150">
       <Sidebar />
       <RightPanel activeSection={activeSection} />
 
@@ -269,7 +269,7 @@ export const LearningDocsView = () => {
               <img 
                 src="https://images.unsplash.com/photo-1586165368502-1bad197a6461?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80" 
                 alt="Chess Board" 
-                className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity duration-500"
+                className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity duration-150"
               />
             </div>
           </FadeIn>

@@ -45,7 +45,7 @@ export default function EvalBar() {
     <div className="w-5 md:w-6 h-full bg-[#1e1e1e] rounded-lg overflow-hidden flex flex-col relative border border-white/[0.05] shadow-[0_4px_20px_rgba(0,0,0,0.5)]">
       {/* Black's side (top by default) */}
       <div 
-        className={`w-full absolute transition-all duration-700 ease-out flex items-start justify-center pt-2 font-mono text-[9px] md:text-[10px] font-bold z-10 
+        className={`w-full absolute transition-all duration-300 ease-out flex items-start justify-center pt-2 font-mono text-[9px] md:text-[10px] font-bold z-10 
           ${isWhiteBottom ? 'top-0' : 'bottom-0'} 
           ${score < 0 ? 'text-white' : 'text-black/50'}`}
         style={{ 
@@ -61,7 +61,7 @@ export default function EvalBar() {
 
       {/* White's side (bottom by default) */}
       <div 
-        className={`w-full absolute transition-all duration-700 ease-out flex items-end justify-center pb-2 font-mono text-[9px] md:text-[10px] font-bold z-10
+        className={`w-full absolute transition-all duration-300 ease-out flex items-end justify-center pb-2 font-mono text-[9px] md:text-[10px] font-bold z-10
           ${isWhiteBottom ? 'bottom-0' : 'top-0'}
           ${score > 0 ? 'text-black' : 'text-white/50'}`}
         style={{ 

@@ -49,7 +49,7 @@ export function AIThinkingIndicator({ onCancel }: AIThinkingIndicatorProps) {
               initial={{ y: 15, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: -15, opacity: 0 }}
-              transition={{ duration: 0.3 }}
+              transition={{ duration: 0.15 }}
               className="text-[12px] font-semibold text-white/90 text-center absolute"
             >
               {MESSAGES[msgIndex]}

@@ -41,7 +41,7 @@ export const AcademyLessonView = () => {
   };
 
   return (
-    <div className="absolute inset-0 z-50 bg-[#0a0a0c] flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-8 duration-500">
+    <div className="absolute inset-0 z-50 bg-[#0a0a0c] flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-8 duration-150">
       
       {/* Header */}
       <div className="h-16 shrink-0 border-b border-white/5 bg-black/40 backdrop-blur-md flex items-center justify-between px-4 sm:px-6 z-20">

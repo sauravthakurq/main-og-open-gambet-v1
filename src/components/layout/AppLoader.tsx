@@ -77,7 +77,7 @@ export default function AppLoader({ children }: { children: React.ReactNode }) {
             key="loader"
             initial={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.8, ease: "easeInOut" }}
+            transition={{ duration: 0.15, ease: "easeInOut" }}
             className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-[#0a0a0a]"
           >
             <div className="w-[80px] h-[80px] mb-8 relative flex items-center justify-center">

@@ -10,12 +10,12 @@ const CardWrapper = ({ children, className, onClick, delay = 0 }: any) => (
   <motion.div
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.5, delay }}
+    transition={{ duration: 0.15, delay }}
     whileHover={{ y: -8, scale: 1.02 }}
     onClick={onClick}
-    className={`relative overflow-hidden rounded-[24px] bg-white/5 border border-white/10 backdrop-blur-xl shadow-lg hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)] cursor-pointer group transition-all duration-300 ${className}`}
+    className={`relative overflow-hidden rounded-[24px] bg-white/5 border border-white/10 backdrop-blur-xl shadow-lg hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)] cursor-pointer group transition-all duration-150 ${className}`}
   >
-    <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+    <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-150" />
     {children}
   </motion.div>
 );

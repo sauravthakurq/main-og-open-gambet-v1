@@ -83,7 +83,7 @@ export default function RightSidebar({ showSettings, setShowSettings }: { showSe
   };
 
   return (
-    <aside className={`flex flex-col gap-3 h-full w-[320px] md:w-[360px] transition-opacity duration-300 ${showSettings ? 'opacity-20 pointer-events-none' : 'opacity-100'} overflow-y-auto overflow-x-hidden pb-6 custom-scrollbar`}>
+    <aside className={`flex flex-col gap-3 h-full w-[320px] md:w-[360px] transition-opacity duration-150 ${showSettings ? 'opacity-20 pointer-events-none' : 'opacity-100'} overflow-y-auto overflow-x-hidden pb-6 custom-scrollbar`}>
       
       {/* 1. AI Control Card */}
       <motion.div className="flex flex-col p-4 rounded-xl border border-white/[0.04] bg-[#141414]/90 backdrop-blur-3xl shadow-lg relative overflow-hidden shrink-0">
@@ -151,7 +151,7 @@ export default function RightSidebar({ showSettings, setShowSettings }: { showSe
       </motion.div>
 
       {/* 2. AI Thinking & Engine Dashboard */}
-      <motion.div className={`p-4 rounded-xl border border-white/[0.04] bg-[#141414]/90 backdrop-blur-3xl shadow-lg relative overflow-hidden flex flex-col shrink-0 transition-all duration-300 ${isAIMinimized ? 'h-[52px]' : ''}`}>
+      <motion.div className={`p-4 rounded-xl border border-white/[0.04] bg-[#141414]/90 backdrop-blur-3xl shadow-lg relative overflow-hidden flex flex-col shrink-0 transition-all duration-150 ${isAIMinimized ? 'h-[52px]' : ''}`}>
         <div className="flex items-center justify-between mb-4 relative z-10">
           <div className="flex items-center gap-2">
             <Brain size={14} className="text-[var(--color-accent)] opacity-80" />

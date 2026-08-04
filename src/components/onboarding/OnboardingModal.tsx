@@ -18,6 +18,12 @@ export default function OnboardingModal() {
   const { appState, matchConfig, updateMatchConfig, setAppState } = useAppStore();
   const [step, setStep] = useState<OnboardingStep>('opponent');
 
+  React.useEffect(() => {
+    if (appState === 'onboarding') {
+      setStep('opponent');
+    }
+  }, [appState]);
+
   if (appState !== 'onboarding') return null;
 
   const handleOpponentSelect = (type: any) => {
@@ -91,7 +97,7 @@ export default function OnboardingModal() {
             initial={{ opacity: 0, scale: 1.02 }}
             animate={{ opacity: 0.8, scale: 1 }}
             exit={{ opacity: 0, scale: 0.98 }}
-            transition={{ duration: 0.4, ease: "easeOut" }}
+            transition={{ duration: 0.15, ease: "easeOut" }}
             className="absolute inset-0 pointer-events-none select-none bg-cover bg-center"
             style={{ 
               backgroundImage: matchConfig.opponentType === 'online' 
@@ -124,7 +130,7 @@ export default function OnboardingModal() {
               initial={{ opacity: 0, y: 15, scale: 0.98 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -15, scale: 0.98 }}
-              transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
+              transition={{ duration: 0.15, ease: [0.23, 1, 0.32, 1] }}
               className="w-full text-center"
             >
 
@@ -138,7 +144,7 @@ export default function OnboardingModal() {
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: 20 }}
-              transition={{ duration: 0.3 }}
+              transition={{ duration: 0.15 }}
               className="w-full flex justify-center"
             >
               {matchConfig.opponentType === 'computer' && (
@@ -180,7 +186,7 @@ export default function OnboardingModal() {
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: 20 }}
-              transition={{ duration: 0.3 }}
+              transition={{ duration: 0.15 }}
               className="w-full h-full flex items-center justify-center pt-10 sm:pt-0 pb-10"
             >
               <GameSetup 

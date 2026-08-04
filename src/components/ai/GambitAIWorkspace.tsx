@@ -42,7 +42,7 @@ export const GambitAIWorkspace = () => {
             initial={{ scale: 0.95, opacity: 0, y: 20 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.95, opacity: 0, y: 20 }}
-            transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
+            transition={{ type: 'spring', bounce: 0.2, duration: 0.15 }}
             className="relative w-full max-w-[1400px] h-[90vh] max-h-[900px] m-auto bg-[#0a0a0c]/95 border border-[var(--color-accent)]/20 rounded-[2rem] shadow-[0_0_100px_-20px_var(--color-accent)] overflow-hidden flex flex-col md:flex-row backdrop-blur-3xl"
           >
             {/* Close Button */}
@@ -140,7 +140,7 @@ export const GambitAIWorkspace = () => {
 
                {/* Home Tab */}
                {activeTab === 'home' && (
-                 <div className="w-full h-full flex flex-col p-8 animate-in fade-in slide-in-from-bottom-4 duration-500 relative">
+                 <div className="w-full h-full flex flex-col p-8 animate-in fade-in slide-in-from-bottom-4 duration-150 relative">
                     
                     {/* Centered Orb and Greeting */}
                     <div className="flex-1 flex flex-col items-center justify-center -mt-10">

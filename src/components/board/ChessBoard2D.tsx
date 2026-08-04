@@ -184,7 +184,7 @@ export default function ChessBoard2D() {
             initial={{ opacity: 0, scale: 0.8, y: 10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: -10 }}
-            transition={{ type: 'spring', bounce: 0.5, duration: 0.6 }}
+            transition={{ type: 'spring', bounce: 0.5, duration: 0.15 }}
             className="absolute inset-0 pointer-events-none flex items-center justify-center z-50"
           >
             <div className="bg-gradient-to-b from-red-500/90 to-red-600/90 backdrop-blur-xl border border-red-400/50 text-white font-bold text-4xl px-8 py-3 rounded-2xl shadow-[0_10px_40px_rgba(239,68,68,0.5)] tracking-widest uppercase">

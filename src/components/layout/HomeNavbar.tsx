@@ -27,7 +27,7 @@ const GambitAINavButton = ({ onClick }: { onClick: () => void }) => {
 
   return (
     <div 
-      className="relative flex items-center justify-center cursor-pointer group rounded-xl p-1.5 transition-all duration-300 active:scale-95"
+      className="relative flex items-center justify-center cursor-pointer group rounded-xl p-1.5 transition-all duration-150 active:scale-95"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={onClick}
@@ -35,7 +35,7 @@ const GambitAINavButton = ({ onClick }: { onClick: () => void }) => {
       <img 
         src="/icon%20we.webp" 
         alt="Gambit AI" 
-        className="w-10 h-10 object-contain hover:scale-110 transition-transform duration-300 drop-shadow-[0_0_10px_rgba(227,193,149,0.3)]" 
+        className="w-10 h-10 object-contain hover:scale-110 transition-transform duration-150 drop-shadow-[0_0_10px_rgba(227,193,149,0.3)]" 
         draggable={false}
       />
 
@@ -158,7 +158,7 @@ export default function HomeNavbar() {
   if (appState === 'playing') return null;
 
   return (
-    <header className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-7xl h-[60px] flex items-center justify-between px-2 sm:px-4 rounded-2xl border border-white/[0.08] bg-black/40 backdrop-blur-2xl shadow-2xl transition-all duration-300">
+    <header className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-7xl h-[60px] flex items-center justify-between px-2 sm:px-4 rounded-2xl border border-white/[0.08] bg-black/40 backdrop-blur-2xl shadow-2xl transition-all duration-150">
       
       {/* Left: Back Button (Only on non-home pages) */}
       <div className="flex items-center w-1/3">
@@ -177,7 +177,7 @@ export default function HomeNavbar() {
 
       {/* Center: Branding */}
       <div className="flex items-center justify-center gap-3 w-1/3 cursor-pointer group" onClick={() => setAppState('onboarding')}>
-        <img alt="Logo" className="w-8 h-8 object-contain transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3 shrink-0" draggable="false" src="/logo.png" />
+        <img alt="Logo" className="w-8 h-8 object-contain transition-transform duration-150 group-hover:scale-110 group-hover:rotate-3 shrink-0" draggable="false" src="/logo.png" />
         <div className="hidden sm:flex flex-col text-center">
           <span className="text-[14px] font-bold text-white leading-none tracking-wide group-hover:text-white/90 transition-colors">Open Gambit</span>
           <span className="text-[9px] font-semibold text-[#b58863] uppercase tracking-[0.15em] leading-none mt-[3px]">CHESS AI</span>

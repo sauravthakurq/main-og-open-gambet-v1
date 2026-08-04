@@ -47,7 +47,7 @@ export const SettingsModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: (
             initial={{ scale: 0.95, opacity: 0, y: 20 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.95, opacity: 0, y: 20 }}
-            transition={{ type: 'spring', bounce: 0.3, duration: 0.6 }}
+            transition={{ type: 'spring', bounce: 0.3, duration: 0.15 }}
             className="relative w-full max-w-[1200px] h-[85vh] max-h-[850px] m-auto bg-[#0c0c0c]/95 border border-white/10 rounded-[2rem] shadow-[0_30px_100px_-20px_rgba(0,0,0,1)] overflow-hidden flex flex-col md:flex-row backdrop-blur-2xl"
           >
             {/* Close Button */}

@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 
 export const AILearning = () => {
   return (
-    <div className="w-full h-full p-8 animate-in fade-in slide-in-from-bottom-4 duration-500 overflow-y-auto custom-scrollbar">
+    <div className="w-full h-full p-8 animate-in fade-in slide-in-from-bottom-4 duration-150 overflow-y-auto custom-scrollbar">
        <div className="max-w-5xl mx-auto">
          
          <div className="flex items-center gap-4 mb-8 border-b border-white/5 pb-6">

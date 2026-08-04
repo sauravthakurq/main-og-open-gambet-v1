@@ -24,7 +24,7 @@ export default function ComputerConfig({ onBack, onNext }: ComputerConfigProps) 
       <div className="flex items-center justify-between mb-8">
         <button 
           onClick={onBack}
-          className="w-10 h-10 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 border border-white/5 text-[#86868B] hover:text-white transition-all duration-300 backdrop-blur-md"
+          className="w-10 h-10 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 border border-white/5 text-[#86868B] hover:text-white transition-all duration-150 backdrop-blur-md"
         >
           <ArrowLeft size={20} strokeWidth={2} />
         </button>
@@ -39,7 +39,7 @@ export default function ComputerConfig({ onBack, onNext }: ComputerConfigProps) 
             <motion.button
               key={diff.id}
               onClick={() => setSelected(diff.id as Difficulty)}
-              className={`relative overflow-hidden flex items-center justify-between p-4 rounded-2xl border transition-all duration-300 text-left group ${
+              className={`relative overflow-hidden flex items-center justify-between p-4 rounded-2xl border transition-all duration-150 text-left group ${
                 isSelected 
                   ? 'border-[var(--color-accent)]/30 bg-[var(--color-accent)]/[0.05] shadow-[0_4px_24px_rgba(184,164,142,0.15)]' 
                   : 'border-white/5 bg-white/[0.02] hover:bg-white/[0.04]'

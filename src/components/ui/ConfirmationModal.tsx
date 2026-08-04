@@ -51,7 +51,7 @@ export function ConfirmationModal() {
           initial={{ opacity: 0, scale: 0.95, y: 10 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 10 }}
-          transition={{ type: 'spring', bounce: 0, duration: 0.3 }}
+          transition={{ type: 'spring', bounce: 0, duration: 0.15 }}
           className="relative w-full max-w-sm bg-[#1a1a1c] border border-white/10 rounded-2xl shadow-2xl overflow-hidden"
         >
           <div className="p-6">

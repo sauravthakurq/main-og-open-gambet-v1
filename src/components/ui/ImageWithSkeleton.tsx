@@ -25,7 +25,7 @@ export const ImageWithSkeleton: React.FC<ImageWithSkeletonProps> = ({
       <img
         src={src}
         alt={alt}
-        className={`transition-opacity duration-300 ${isLoaded ? 'opacity-100' : 'opacity-0'} ${className}`}
+        className={`transition-opacity duration-150 ${isLoaded ? 'opacity-100' : 'opacity-0'} ${className}`}
         onLoad={() => setIsLoaded(true)}
         {...props}
       />

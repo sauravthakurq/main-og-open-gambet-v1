@@ -167,7 +167,7 @@ export default function BoardAndPiecesSettings() {
                         </div>
                       </div>
                    ) : (
-                     <img src={`/assets/boards/${b}.png`} alt={b} className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-500" />
+                     <img src={`/assets/boards/${b}.png`} alt={b} className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-150" />
                    )}
                    <div className="absolute top-1 right-1 bg-black/60 backdrop-blur-md text-[9px] px-1.5 py-0.5 rounded text-white/70 font-bold uppercase tracking-wider">Board</div>
                 </div>
@@ -223,7 +223,7 @@ export default function BoardAndPiecesSettings() {
           key={activeTab}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3 }}
+          transition={{ duration: 0.15 }}
           className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6"
         >
           {isLoading ? (

@@ -52,7 +52,7 @@ export function GameStateIndicator() {
             scale: [0.85, 1.04, 1],
           }}
           exit={{ opacity: 0, y: -20, scale: 0.9 }}
-          transition={{ duration: 0.35, ease: 'easeOut' }}
+          transition={{ duration: 0.155, ease: 'easeOut' }}
           className={`
             relative overflow-hidden rounded-2xl border-2 p-4 sm:p-5 flex items-center justify-between gap-4 shadow-2xl backdrop-blur-2xl pointer-events-auto
             ${isRed 

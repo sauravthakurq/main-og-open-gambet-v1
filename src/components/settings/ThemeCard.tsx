@@ -29,7 +29,7 @@ export const ThemeCard = ({
       exit={{ opacity: 0, scale: 0.9 }}
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
-      className={`relative group cursor-pointer rounded-3xl overflow-hidden border-2 transition-all duration-300 ${
+      className={`relative group cursor-pointer rounded-3xl overflow-hidden border-2 transition-all duration-150 ${
         isSelected
           ? 'border-[var(--color-accent)] shadow-[0_0_30px_rgba(227,193,149,0.2)]'
           : 'border-white/5 hover:border-white/20 hover:shadow-xl bg-[#1c1c1e]'
@@ -69,7 +69,7 @@ export const ThemeCard = ({
             <img
               src={`/assets/boards/${id}.png`}
               alt={name}
-              className="w-full h-full object-contain transition-transform duration-700 group-hover:scale-110"
+              className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-110"
               loading="lazy"
             />
           )
@@ -85,7 +85,7 @@ export const ThemeCard = ({
                 <img
                   src={`/assets/pieces/${id}/${p}.png`}
                   alt={p}
-                  className="w-full h-full max-w-[80%] max-h-[80%] object-contain drop-shadow-xl transition-transform duration-500 group-hover:scale-110"
+                  className="w-full h-full max-w-[80%] max-h-[80%] object-contain drop-shadow-xl transition-transform duration-150 group-hover:scale-110"
                   loading="lazy"
                 />
               </div>

@@ -34,7 +34,7 @@ export default function Footer() {
           <div className="flex flex-col gap-3">
             <h4 className="font-bold text-white/80 text-sm uppercase tracking-wider mb-2">Community</h4>
             <Link href="/community-guidelines" className="text-sm text-white/50 hover:text-[var(--color-accent)] transition-colors">Guidelines</Link>
-            <a href="https://github.com/open-gambit" target="_blank" rel="noopener noreferrer" className="text-sm text-white/50 hover:text-[var(--color-accent)] transition-colors">GitHub</a>
+            <a href="https://github.com/sauravthakurq/main-og-open-gambet-v1.git" target="_blank" rel="noopener noreferrer" className="text-sm text-white/50 hover:text-[var(--color-accent)] transition-colors">GitHub</a>
           </div>
         </div>
       </div>

@@ -42,7 +42,7 @@ export default function MatchIntro() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.8, ease: "easeInOut" }}
+          transition={{ duration: 0.15, ease: "easeInOut" }}
           className="fixed inset-0 z-[200] flex flex-col items-center justify-center bg-black/90 backdrop-blur-2xl overflow-hidden"
         >
           {/* Subtle animated background elements */}
@@ -58,7 +58,7 @@ export default function MatchIntro() {
               <motion.div
                 initial={{ x: -50, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
-                transition={{ delay: 0.3, duration: 0.8, ease: "easeOut" }}
+                transition={{ delay: 0.3, duration: 0.15, ease: "easeOut" }}
                 className="flex flex-col items-center gap-4 flex-1"
               >
                 <div className="w-24 h-24 rounded-full bg-white border-[4px] border-white/20 shadow-[0_0_40px_rgba(255,255,255,0.2)] flex items-center justify-center relative overflow-hidden">
@@ -90,7 +90,7 @@ export default function MatchIntro() {
               <motion.div
                 initial={{ x: 50, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
-                transition={{ delay: 0.3, duration: 0.8, ease: "easeOut" }}
+                transition={{ delay: 0.3, duration: 0.15, ease: "easeOut" }}
                 className="flex flex-col items-center gap-4 flex-1"
               >
                 <div className="w-24 h-24 rounded-full bg-[#111] border-[4px] border-white/10 shadow-[0_0_40px_rgba(0,0,0,0.4)] flex items-center justify-center relative overflow-hidden">
@@ -111,7 +111,7 @@ export default function MatchIntro() {
             <motion.div
               initial={{ y: 30, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 1, duration: 0.8 }}
+              transition={{ delay: 1, duration: 0.15 }}
               className="mt-8 flex gap-8 items-center"
             >
               <div className="px-6 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-md text-white/70 font-bold tracking-widest uppercase text-sm">

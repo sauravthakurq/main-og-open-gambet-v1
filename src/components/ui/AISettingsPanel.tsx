@@ -311,7 +311,7 @@ export default function AISettingsPanel({ onClose, onSave, onCancel, overridePro
 
       {/* Main Modal Container with smooth Apple-like curves & EXPANDED HEIGHT */}
       <div 
-        className="relative w-full max-w-[1000px] h-[90vh] max-h-[850px] min-h-[580px] rounded-[24px] flex flex-col shadow-[0_30px_60px_rgba(0,0,0,0.5),0_0_0_1px_rgba(255,255,255,0.08)] overflow-hidden font-sans transition-all duration-300"
+        className="relative w-full max-w-[1000px] h-[90vh] max-h-[850px] min-h-[580px] rounded-[24px] flex flex-col shadow-[0_30px_60px_rgba(0,0,0,0.5),0_0_0_1px_rgba(255,255,255,0.08)] overflow-hidden font-sans transition-all duration-150"
         style={{ backgroundColor: theme.bg }}
       >
         
@@ -348,7 +348,7 @@ export default function AISettingsPanel({ onClose, onSave, onCancel, overridePro
           
           {/* Scrollable Sidebar (VBox on Desktop, HBox on Mobile) */}
           <div 
-            className="w-full md:w-[280px] flex flex-col border-b md:border-b-0 md:border-r shrink-0 relative z-10 transition-all duration-300" 
+            className="w-full md:w-[280px] flex flex-col border-b md:border-b-0 md:border-r shrink-0 relative z-10 transition-all duration-150" 
             style={{ borderColor: theme.borderColor, backgroundColor: theme.panelBg }}
           >
             <div className="flex flex-row md:flex-col overflow-x-auto md:overflow-y-auto py-3 px-3 gap-2 md:space-y-1 custom-scrollbar">
@@ -403,7 +403,7 @@ export default function AISettingsPanel({ onClose, onSave, onCancel, overridePro
                     <div className="flex items-center justify-center w-4 h-4">
                       {configs[provider.id]?.status === 'connected' && (
                         <div 
-                          className="w-2 h-2 rounded-full shadow-[0_0_10px_rgba(50,215,75,0.6)] animate-in fade-in zoom-in duration-300"
+                          className="w-2 h-2 rounded-full shadow-[0_0_10px_rgba(50,215,75,0.6)] animate-in fade-in zoom-in duration-150"
                           style={{ backgroundColor: theme.success }}
                         />
                       )}
@@ -429,11 +429,11 @@ export default function AISettingsPanel({ onClose, onSave, onCancel, overridePro
           {/* Main Settings Panel - Scrollable bounds */}
           <div className="flex-1 overflow-y-auto relative bg-[#141415] rounded-br-[24px] custom-scrollbar">
             
-            <div className="max-w-2xl mx-auto space-y-4 p-5 sm:p-6 animate-in fade-in duration-500 fill-mode-both" key={activeProviderId}>
+            <div className="max-w-2xl mx-auto space-y-4 p-5 sm:p-6 animate-in fade-in duration-150 fill-mode-both" key={activeProviderId}>
               {/* Aesthetic Slim Status Card */}
               <div 
                 className={`
-                  rounded-[16px] border px-5 py-3.5 flex items-center justify-between gap-4 transition-all duration-300 shadow-sm
+                  rounded-[16px] border px-5 py-3.5 flex items-center justify-between gap-4 transition-all duration-150 shadow-sm
                   ${activeConfig.status === 'connected' ? 'bg-[#32D74B]/[0.06] border-[#32D74B]/20 shadow-[0_0_15px_rgba(50,215,75,0.05)]' : 
                     activeConfig.status === 'error' ? 'bg-[#FF453A]/[0.06] border-[#FF453A]/20 shadow-[0_0_15px_rgba(255,69,58,0.05)]' : 
                     activeConfig.status === 'testing' ? 'bg-[#E3C195]/[0.06] border-[#E3C195]/20' :
@@ -482,7 +482,7 @@ export default function AISettingsPanel({ onClose, onSave, onCancel, overridePro
 
                 <div className="shrink-0 flex items-center">
                   <div 
-                    className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-300
+                    className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-150
                       ${activeConfig.status === 'connected' ? 'bg-[#32D74B]/15 text-[#32D74B]' : 
                         activeConfig.status === 'error' ? 'bg-[#FF453A]/15 text-[#FF453A]' : 
                         activeConfig.status === 'testing' ? 'bg-[#E3C195]/15 text-[#E3C195]' :
@@ -716,14 +716,14 @@ export default function AISettingsPanel({ onClose, onSave, onCancel, overridePro
                     </span>
                   </div>
                   <ChevronDown 
-                    className={`w-4 h-4 opacity-50 group-hover:opacity-100 transition-transform duration-300 ${showAdvanced ? 'rotate-180' : ''}`} 
+                    className={`w-4 h-4 opacity-50 group-hover:opacity-100 transition-transform duration-150 ${showAdvanced ? 'rotate-180' : ''}`} 
                     style={{ color: theme.textMain }} 
                   />
                 </button>
 
                 {/* Animated Dropdown for Advanced Settings */}
                 {showAdvanced && (
-                  <div className="flex flex-col gap-6 bg-[#1C1C1E]/50 p-6 rounded-[16px] border border-white/[0.05] animate-in fade-in slide-in-from-top-4 duration-300">
+                  <div className="flex flex-col gap-6 bg-[#1C1C1E]/50 p-6 rounded-[16px] border border-white/[0.05] animate-in fade-in slide-in-from-top-4 duration-150">
                     
                     {activeProviderId !== 'Custom' && (
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">

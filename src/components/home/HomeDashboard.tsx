@@ -45,7 +45,7 @@ export default function HomeDashboard({ onStartNewGame, onContinueLastMatch }: H
         <motion.div 
           initial={{ opacity: 0, y: 30, scale: 0.98 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}
           className="relative w-full h-[360px] md:h-[420px] rounded-[32px] overflow-hidden group shadow-2xl"
         >
           {/* Animated Background */}

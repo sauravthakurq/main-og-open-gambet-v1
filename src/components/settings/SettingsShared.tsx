@@ -32,7 +32,7 @@ export const SettingRow = ({ title, description, children, isLast }: any) => (
 export const SettingToggle = ({ checked, onChange }: { checked: boolean; onChange: (val: boolean) => void }) => (
   <button
     onClick={() => onChange(!checked)}
-    className={`relative w-12 h-7 rounded-full transition-colors duration-300 focus:outline-none ${
+    className={`relative w-12 h-7 rounded-full transition-colors duration-150 focus:outline-none ${
       checked ? 'bg-[var(--color-accent)]' : 'bg-white/10'
     }`}
   >

@@ -279,7 +279,7 @@ export default function RoomScreen({ roomId, onBack, onStartGame }: RoomScreenPr
                 onClick={handleLockSettings} 
                 className="group relative px-8 py-4 bg-gradient-to-b from-white/10 to-white/5 border border-white/10 hover:border-[var(--color-accent)]/50 text-white font-bold rounded-2xl shadow-[0_4px_24px_rgba(0,0,0,0.4)] hover:shadow-[0_4px_32px_var(--color-accent-dim)] transition-all hover:-translate-y-1 active:translate-y-0 active:scale-[0.98] w-full max-w-[300px] flex items-center justify-center gap-3 overflow-hidden backdrop-blur-xl"
               >
-                <div className="absolute inset-0 bg-[var(--color-accent)] opacity-0 group-hover:opacity-10 transition-opacity duration-300" />
+                <div className="absolute inset-0 bg-[var(--color-accent)] opacity-0 group-hover:opacity-10 transition-opacity duration-150" />
                 <ShieldCheck size={20} className="text-[var(--color-accent)] group-hover:scale-110 transition-transform" />
                 <span className="tracking-wide text-white/90 group-hover:text-white">Lock Configuration</span>
               </button>
@@ -294,7 +294,7 @@ export default function RoomScreen({ roomId, onBack, onStartGame }: RoomScreenPr
 
             {room.isLocked && ((isHost && !room.hostReady) || (isGuest && !room.guestReady)) && (
               <button onClick={handleReady} className="group relative px-8 py-4 bg-[var(--color-accent)] text-black font-bold rounded-2xl shadow-[0_0_24px_var(--color-accent-dim)] hover:shadow-[0_0_32px_rgba(184,164,142,0.4)] transition-all hover:-translate-y-1 active:translate-y-0 active:scale-[0.98] flex items-center justify-center gap-3 w-full max-w-[300px] overflow-hidden">
-                <div className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-150" />
                 <Play size={20} className="fill-black group-hover:scale-110 transition-transform" /> 
                 <span className="tracking-wide uppercase text-sm">Ready to Play</span>
               </button>

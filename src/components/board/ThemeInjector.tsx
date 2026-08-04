@@ -31,7 +31,7 @@ export const ThemeInjector = () => {
     if (boardTheme !== 'default') {
       styleStr += `
         /* Board injection */
-        .cg-wrap {
+        .cg-wrap cg-board {
           background-image: url(/assets/boards/${boardTheme}.png) !important;
           background-size: cover !important;
           background-position: center !important;
