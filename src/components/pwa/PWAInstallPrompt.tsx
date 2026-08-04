@@ -76,58 +76,52 @@ export const PWAInstallPrompt = () => {
           transition={{ type: 'spring', damping: 25, stiffness: 200 }}
           className="fixed bottom-4 left-4 right-4 md:left-auto md:right-8 md:w-96 z-[9999]"
         >
-          <div className="relative overflow-hidden bg-black/80 backdrop-blur-2xl border border-white/10 p-5 rounded-3xl shadow-2xl">
-            {/* Glass effect overlays */}
-            <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent pointer-events-none" />
-            
-            <button 
-              onClick={handleDismiss}
-              className="absolute top-3 right-3 p-1.5 rounded-full bg-white/5 hover:bg-white/10 text-white/50 hover:text-white transition-colors"
-            >
-              <X size={16} />
-            </button>
-
-            <div className="flex items-start gap-4 mb-4 relative z-10">
-              <div className="w-14 h-14 rounded-2xl bg-white/10 border border-white/20 p-2 shrink-0 flex items-center justify-center overflow-hidden">
-                <img src="/logo.png" alt="Open Gambit" className="w-full h-full object-contain drop-shadow-md" />
-              </div>
-              <div>
-                <h3 className="font-bold text-white text-lg leading-tight mb-1">Install Open Gambit</h3>
-                <p className="text-white/60 text-sm leading-relaxed">
-                  Play chess anywhere with the full app experience.
-                </p>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-2 mb-4 relative z-10">
-              <div className="flex items-center gap-1.5 text-xs text-white/50 font-medium">
-                <div className="w-1.5 h-1.5 rounded-full bg-blue-500" /> Offline Support
-              </div>
-              <div className="flex items-center gap-1.5 text-xs text-white/50 font-medium">
-                <div className="w-1.5 h-1.5 rounded-full bg-green-500" /> Fast Launch
-              </div>
-              <div className="flex items-center gap-1.5 text-xs text-white/50 font-medium">
-                <div className="w-1.5 h-1.5 rounded-full bg-purple-500" /> Native App Feel
-              </div>
-              <div className="flex items-center gap-1.5 text-xs text-white/50 font-medium">
-                <div className="w-1.5 h-1.5 rounded-full bg-orange-500" /> Auto Updates
-              </div>
-            </div>
-
-            <div className="flex items-center gap-3 relative z-10">
+          <div className="relative overflow-hidden bg-[#0a0a0a] border border-white/[0.08] rounded-3xl shadow-2xl flex flex-col w-full max-w-sm">
+            {/* Banner Image */}
+            <div className="w-full h-32 relative">
+              <img 
+                src="/think-like-ai.png" 
+                alt="Premium Chess" 
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-transparent"></div>
+              
               <button 
                 onClick={handleDismiss}
-                className="flex-1 py-2.5 rounded-xl font-bold text-sm text-white/70 hover:text-white hover:bg-white/10 transition-colors"
+                className="absolute top-3 right-3 p-1.5 rounded-full bg-black/40 hover:bg-black/60 backdrop-blur-md text-white/70 hover:text-white transition-colors z-10"
               >
-                Maybe Later
+                <X size={16} />
               </button>
-              <button 
-                onClick={handleInstallClick}
-                className="flex-1 py-2.5 rounded-xl font-bold text-sm bg-white text-black hover:bg-white/90 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 shadow-lg"
-              >
-                <Download size={16} />
-                Install App
-              </button>
+            </div>
+
+            {/* Content Area */}
+            <div className="p-5 flex flex-col items-center text-center -mt-8 relative z-10">
+              {/* App Logo */}
+              <div className="w-16 h-16 rounded-2xl bg-[#1a1a1a] border border-white/10 p-2.5 flex items-center justify-center overflow-hidden shadow-xl mb-3">
+                <img src="/logo.png" alt="Open Gambit" className="w-full h-full object-contain drop-shadow-lg" />
+              </div>
+
+              <h3 className="font-bold text-white text-xl tracking-tight mb-1">Open Gambit</h3>
+              <p className="text-white/60 text-sm leading-relaxed mb-5">
+                Play chess anywhere with our native app experience. Offline support included.
+              </p>
+
+              {/* Action Buttons */}
+              <div className="flex flex-col w-full gap-2">
+                <button 
+                  onClick={handleInstallClick}
+                  className="w-full py-3.5 rounded-xl font-bold text-sm bg-white text-black hover:bg-white/90 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(255,255,255,0.15)]"
+                >
+                  <Download size={18} strokeWidth={2.5} />
+                  Install Application
+                </button>
+                <button 
+                  onClick={handleDismiss}
+                  className="w-full py-2 rounded-xl font-medium text-xs text-white/40 hover:text-white/80 transition-colors"
+                >
+                  Not right now
+                </button>
+              </div>
             </div>
           </div>
         </motion.div>

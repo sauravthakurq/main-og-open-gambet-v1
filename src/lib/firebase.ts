@@ -5,6 +5,7 @@ import { initializeApp, getApps, FirebaseApp } from 'firebase/app';
 import { getAuth, Auth } from 'firebase/auth';
 import { getFirestore, Firestore } from 'firebase/firestore';
 import { getDatabase, Database } from 'firebase/database';
+import { getAnalytics, Analytics } from 'firebase/analytics';
 
 const firebaseConfig = {
   apiKey:            process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -14,6 +15,7 @@ const firebaseConfig = {
   messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
   appId:             process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
   databaseURL:       process.env.NEXT_PUBLIC_FIREBASE_DATABASE_URL,
+  measurementId:     process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
 
 // Validate config is provided
@@ -26,13 +28,18 @@ let app: FirebaseApp;
 let auth: Auth;
 let db: Firestore;
 let rtdb: Database;
+let analytics: Analytics | null = null;
 
 if (isFirebaseConfigured) {
   app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig as any);
   auth = getAuth(app);
   db = getFirestore(app);
   rtdb = getDatabase(app);
+  
+  if (typeof window !== 'undefined') {
+    analytics = getAnalytics(app);
+  }
 }
 
-export { auth, db, rtdb };
+export { auth, db, rtdb, analytics };
 export default isFirebaseConfigured ? app! : null;
