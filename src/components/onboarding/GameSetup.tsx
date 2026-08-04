@@ -12,11 +12,24 @@ interface GameSetupProps {
 }
 
 const PROVIDERS = [
-  { id: 'OpenAI', name: 'OpenAI', models: [{ id: 'gpt-5', name: 'GPT-5' }, { id: 'gpt-4o', name: 'GPT-4o' }] },
-  { id: 'Anthropic', name: 'Anthropic', models: [{ id: 'claude-3.5-sonnet', name: 'Claude 3.5 Sonnet' }, { id: 'claude-opus-4.1', name: 'Claude Opus 4.1' }] },
-  { id: 'Google', name: 'Google', models: [{ id: 'gemini-2.5-flash', name: 'Gemini 2.5 Flash' }, { id: 'gemini-2.5-pro', name: 'Gemini 2.5 Pro' }, { id: 'gemini-1.5-pro', name: 'Gemini 1.5 Pro' }] },
-  { id: 'xAI', name: 'xAI', models: [{ id: 'grok-3', name: 'Grok 3' }, { id: 'grok-2', name: 'Grok 2' }] },
-  { id: 'Groq', name: 'Groq', models: [{ id: 'llama-3.1-8b-instant', name: 'Llama 3.1 8B' }, { id: 'llama-3.1-70b-versatile', name: 'Llama 3.1 70B' }] },
+  { id: 'OpenAI', name: 'OpenAI', models: [
+    { id: 'gpt-5.6', name: 'GPT-5.6' }, { id: 'gpt-5.6-sol', name: 'GPT-5.6 Sol' }, { id: 'gpt-5.6-terra', name: 'GPT-5.6 Terra' }, { id: 'gpt-5.6-luna', name: 'GPT-5.6 Luna' }, { id: 'gpt-5.5', name: 'GPT-5.5' }, { id: 'gpt-5.5-pro', name: 'GPT-5.5 Pro' }, { id: 'gpt-5.4', name: 'GPT-5.4' }, { id: 'gpt-5.4-pro', name: 'GPT-5.4 Pro' }, { id: 'gpt-5.4-mini', name: 'GPT-5.4 Mini' }, { id: 'gpt-5.4-nano', name: 'GPT-5.4 Nano' }, { id: 'gpt-5.3-codex', name: 'GPT-5.3 Codex' }, { id: 'gpt-5.2', name: 'GPT-5.2' }, { id: 'gpt-5.2-pro', name: 'GPT-5.2 Pro' }, { id: 'gpt-5.1', name: 'GPT-5.1' }, { id: 'gpt-5', name: 'GPT-5' }, { id: 'gpt-5-mini', name: 'GPT-5 Mini' }, { id: 'gpt-5-nano', name: 'GPT-5 Nano' }, { id: 'gpt-5-pro', name: 'GPT-5 Pro' }, { id: 'gpt-4.1', name: 'GPT-4.1' }, { id: 'gpt-4.1-mini', name: 'GPT-4.1 Mini' }, { id: 'gpt-4o', name: 'GPT-4o' }, { id: 'gpt-4o-mini', name: 'GPT-4o Mini' }, { id: 'o3', name: 'o3' }, { id: 'o3-pro', name: 'o3 Pro' }, { id: 'gpt-oss-120b', name: 'GPT-OSS 120B' }, { id: 'gpt-oss-20b', name: 'GPT-OSS 20B' }
+  ]},
+  { id: 'Anthropic', name: 'Anthropic', models: [
+    { id: 'claude-fable-5', name: 'Claude Fable 5' }, { id: 'claude-opus-5', name: 'Claude Opus 5' }, { id: 'claude-sonnet-5', name: 'Claude Sonnet 5' }, { id: 'claude-haiku-4.5', name: 'Claude Haiku 4.5' }
+  ]},
+  { id: 'Google', name: 'Google Gemini', models: [
+    { id: 'gemini-3.6-flash', name: 'Gemini 3.6 Flash' }, { id: 'gemini-3.5-flash', name: 'Gemini 3.5 Flash' }, { id: 'gemini-3.5-flash-lite', name: 'Gemini 3.5 Flash Lite' }, { id: 'gemini-3.1-pro-preview', name: 'Gemini 3.1 Pro Preview' }, { id: 'gemini-3.1-flash-lite', name: 'Gemini 3.1 Flash Lite' }, { id: 'gemini-3-flash-preview', name: 'Gemini 3 Flash Preview' }, { id: 'gemini-omni-flash', name: 'Gemini Omni Flash' }, { id: 'gemini-2.5-pro', name: 'Gemini 2.5 Pro' }, { id: 'gemini-2.5-flash', name: 'Gemini 2.5 Flash' }, { id: 'gemini-2.5-flash-lite', name: 'Gemini 2.5 Flash Lite' }, { id: 'deep-research-preview-04-2026', name: 'Deep Research Preview' }, { id: 'deep-research-max-preview-04-2026', name: 'Deep Research Max Preview' }
+  ]},
+  { id: 'xAI', name: 'xAI', models: [
+    { id: 'grok-4.5', name: 'Grok 4.5' }, { id: 'grok-4.3', name: 'Grok 4.3' }, { id: 'grok-4.20-0309-reasoning', name: 'Grok 4.20 Reasoning' }, { id: 'grok-4.20-0309-non-reasoning', name: 'Grok 4.20 Non-Reasoning' }, { id: 'grok-4.20-multi-agent-0309', name: 'Grok 4.20 Multi-Agent' }, { id: 'grok-build-0.1', name: 'Grok Build 0.1' }
+  ]},
+  { id: 'DeepSeek', name: 'DeepSeek', models: [
+    { id: 'deepseek-v4-pro', name: 'DeepSeek v4 Pro' }, { id: 'deepseek-v4-flash', name: 'DeepSeek v4 Flash' }
+  ]},
+  { id: 'Groq', name: 'Groq', models: [
+    { id: 'groq/compound', name: 'Groq Compound' }, { id: 'groq/compound-mini', name: 'Groq Compound Mini' }, { id: 'llama-3.3-70b-versatile', name: 'Llama 3.3 70B' }, { id: 'llama-3.1-8b-instant', name: 'Llama 3.1 8B' }, { id: 'openai/gpt-oss-120b', name: 'GPT-OSS 120B' }, { id: 'openai/gpt-oss-20b', name: 'GPT-OSS 20B' }, { id: 'qwen/qwen3.6-27b', name: 'Qwen 3.6 27B' }, { id: 'minimaxai/minimax-m2.7', name: 'Minimax M2.7' }, { id: 'openai/gpt-oss-safeguard-20b', name: 'GPT-OSS Safeguard 20B' }, { id: 'meta-llama/llama-prompt-guard-2-22m', name: 'Llama Prompt Guard 22M' }, { id: 'meta-llama/llama-prompt-guard-2-86m', name: 'Llama Prompt Guard 86M' }, { id: 'canopylabs/orpheus-v1-english', name: 'Orpheus v1 English' }, { id: 'canopylabs/orpheus-arabic-saudi', name: 'Orpheus Arabic' }
+  ]},
   { id: 'Stockfish', name: 'Stockfish', models: [{ id: 'stockfish-16', name: 'Stockfish 16.1' }] }
 ];
 

@@ -39,58 +39,99 @@ const PROVIDERS_DATA = [
     id: 'OpenAI', name: 'OpenAI', icon: Command, iconColor: '#FFF', imageIcon: '/icons/openai.svg',
     defaultBaseUrl: 'https://api.openai.com/v1',
     models: [
-      { id: 'gpt-5', name: 'GPT-5', type: 'Best Overall' },
+      { id: 'gpt-5.6', name: 'GPT-5.6', type: 'Best Overall' },
+      { id: 'gpt-5.6-sol', name: 'GPT-5.6 Sol', type: 'Premium' },
+      { id: 'gpt-5.6-terra', name: 'GPT-5.6 Terra', type: 'Model' },
+      { id: 'gpt-5.6-luna', name: 'GPT-5.6 Luna', type: 'Model' },
+      { id: 'gpt-5.5', name: 'GPT-5.5', type: 'Model' },
+      { id: 'gpt-5.5-pro', name: 'GPT-5.5 Pro', type: 'Premium' },
+      { id: 'gpt-5.4', name: 'GPT-5.4', type: 'Model' },
+      { id: 'gpt-5.4-pro', name: 'GPT-5.4 Pro', type: 'Premium' },
+      { id: 'gpt-5.4-mini', name: 'GPT-5.4 Mini', type: 'Fast' },
+      { id: 'gpt-5.4-nano', name: 'GPT-5.4 Nano', type: 'Fast' },
+      { id: 'gpt-5.3-codex', name: 'GPT-5.3 Codex', type: 'Coding' },
+      { id: 'gpt-5.2', name: 'GPT-5.2', type: 'Model' },
+      { id: 'gpt-5.2-pro', name: 'GPT-5.2 Pro', type: 'Premium' },
+      { id: 'gpt-5.1', name: 'GPT-5.1', type: 'Model' },
+      { id: 'gpt-5', name: 'GPT-5', type: 'Model' },
+      { id: 'gpt-5-mini', name: 'GPT-5 Mini', type: 'Fast' },
+      { id: 'gpt-5-nano', name: 'GPT-5 Nano', type: 'Fast' },
+      { id: 'gpt-5-pro', name: 'GPT-5 Pro', type: 'Premium' },
+      { id: 'gpt-4.1', name: 'GPT-4.1', type: 'Model' },
+      { id: 'gpt-4.1-mini', name: 'GPT-4.1 Mini', type: 'Fast' },
       { id: 'gpt-4o', name: 'GPT-4o', type: 'Balanced' },
-      { id: 'gpt-4-turbo', name: 'GPT-4 Turbo', type: 'Premium' },
-      { id: 'gpt-3.5-turbo', name: 'GPT-3.5 Turbo', type: 'Fast' },
+      { id: 'gpt-4o-mini', name: 'GPT-4o Mini', type: 'Fast' },
+      { id: 'o3', name: 'o3', type: 'Reasoning' },
+      { id: 'o3-pro', name: 'o3 Pro', type: 'Reasoning Premium' },
+      { id: 'gpt-oss-120b', name: 'GPT-OSS 120B', type: 'Open Source' },
+      { id: 'gpt-oss-20b', name: 'GPT-OSS 20B', type: 'Open Source' },
     ]
   },
   {
     id: 'Anthropic', name: 'Anthropic', icon: Triangle, iconColor: '#FFF', imageIcon: '/icons/anthropic.svg',
     defaultBaseUrl: 'https://api.anthropic.com/v1',
     models: [
-      { id: 'claude-3.5-sonnet', name: 'Claude 3.5 Sonnet', type: 'Best Overall' },
-      { id: 'claude-opus-4.1', name: 'Claude Opus 4.1', type: 'Premium' },
-      { id: 'claude-sonnet-4', name: 'Claude Sonnet 4', type: 'Balanced' },
+      { id: 'claude-fable-5', name: 'Claude Fable 5', type: 'Creative' },
+      { id: 'claude-opus-5', name: 'Claude Opus 5', type: 'Premium' },
+      { id: 'claude-sonnet-5', name: 'Claude Sonnet 5', type: 'Best Overall' },
+      { id: 'claude-haiku-4.5', name: 'Claude Haiku 4.5', type: 'Fast' },
     ]
   },
   {
     id: 'Google', name: 'Google', icon: Sparkles, iconColor: '#4285F4', imageIcon: '/icons/google.svg',
     defaultBaseUrl: 'https://generativelanguage.googleapis.com/v1beta',
     models: [
+      { id: 'gemini-3.6-flash', name: 'Gemini 3.6 Flash', type: 'Fast' },
+      { id: 'gemini-3.5-flash', name: 'Gemini 3.5 Flash', type: 'Fast' },
+      { id: 'gemini-3.5-flash-lite', name: 'Gemini 3.5 Flash Lite', type: 'Fast' },
+      { id: 'gemini-3.1-pro-preview', name: 'Gemini 3.1 Pro Preview', type: 'Premium' },
+      { id: 'gemini-3.1-flash-lite', name: 'Gemini 3.1 Flash Lite', type: 'Fast' },
+      { id: 'gemini-3-flash-preview', name: 'Gemini 3 Flash Preview', type: 'Fast' },
+      { id: 'gemini-omni-flash', name: 'Gemini Omni Flash', type: 'Omni' },
+      { id: 'gemini-2.5-pro', name: 'Gemini 2.5 Pro', type: 'Premium' },
       { id: 'gemini-2.5-flash', name: 'Gemini 2.5 Flash', type: 'Fast' },
-      { id: 'gemini-2.5-pro', name: 'Gemini 2.5 Pro', type: 'Best Overall' },
-      { id: 'gemini-1.5-pro', name: 'Gemini 1.5 Pro', type: 'Premium' },
-      { id: 'gemini-1.5-flash', name: 'Gemini 1.5 Flash', type: 'Fast' },
+      { id: 'gemini-2.5-flash-lite', name: 'Gemini 2.5 Flash Lite', type: 'Fast' },
+      { id: 'deep-research-preview-04-2026', name: 'Deep Research Preview', type: 'Research' },
+      { id: 'deep-research-max-preview-04-2026', name: 'Deep Research Max Preview', type: 'Research Premium' }
     ]
   },
   {
     id: 'xAI', name: 'xAI', icon: null, iconColor: '#FFF', customIcon: 'xI', imageIcon: '/icons/xai.svg',
     defaultBaseUrl: 'https://api.x.ai/v1',
     models: [
-      { id: 'grok-3', name: 'Grok 3', type: 'Best Overall' },
-      { id: 'grok-2', name: 'Grok 2', type: 'Balanced' },
-      { id: 'grok-1.5', name: 'Grok 1.5', type: 'Fast' },
+      { id: 'grok-4.5', name: 'Grok 4.5', type: 'Best Overall' },
+      { id: 'grok-4.3', name: 'Grok 4.3', type: 'Fast' },
+      { id: 'grok-4.20-0309-reasoning', name: 'Grok 4.20 Reasoning', type: 'Reasoning' },
+      { id: 'grok-4.20-0309-non-reasoning', name: 'Grok 4.20 Non-Reasoning', type: 'Fast' },
+      { id: 'grok-4.20-multi-agent-0309', name: 'Grok 4.20 Multi-Agent', type: 'Multi-Agent' },
+      { id: 'grok-build-0.1', name: 'Grok Build 0.1', type: 'Coding' }
     ]
   },
   {
     id: 'DeepSeek', name: 'DeepSeek', icon: Search, iconColor: '#4D94FF', imageIcon: '/icons/deepseek.svg',
     defaultBaseUrl: 'https://api.deepseek.com/v1',
     models: [
-      { id: 'deepseek-reasoner', name: 'DeepSeek Reasoner', type: 'Best Overall' },
-      { id: 'deepseek-coder', name: 'DeepSeek Coder', type: 'Coding' },
-      { id: 'deepseek-v3', name: 'DeepSeek V3', type: 'Balanced' },
+      { id: 'deepseek-v4-pro', name: 'DeepSeek v4 Pro', type: 'Best Overall' },
+      { id: 'deepseek-v4-flash', name: 'DeepSeek v4 Flash', type: 'Fast' }
     ]
   },
   {
     id: 'Groq', name: 'Groq', icon: Zap, iconColor: '#F55036', imageIcon: '/icons/groq.svg',
     defaultBaseUrl: 'https://api.groq.com/openai/v1',
     models: [
+      { id: 'groq/compound', name: 'Groq Compound', type: 'Best Overall' },
+      { id: 'groq/compound-mini', name: 'Groq Compound Mini', type: 'Fast' },
+      { id: 'llama-3.3-70b-versatile', name: 'Llama 3.3 70B', type: 'Balanced' },
       { id: 'llama-3.1-8b-instant', name: 'Llama 3.1 8B', type: 'Ultra Fast' },
-      { id: 'llama-3.1-70b-versatile', name: 'Llama 3.1 70B', type: 'Balanced' },
-      { id: 'llama3-8b-8192', name: 'Llama 3 8B', type: 'Ultra Fast' },
-      { id: 'mixtral-8x7b-32768', name: 'Mixtral 8x7B', type: 'Fast' },
-      { id: 'gemma2-9b-it', name: 'Gemma 2 9B', type: 'Lightweight' },
+      { id: 'openai/gpt-oss-120b', name: 'GPT-OSS 120B', type: 'Premium' },
+      { id: 'openai/gpt-oss-20b', name: 'GPT-OSS 20B', type: 'Fast' },
+      { id: 'qwen/qwen3.6-27b', name: 'Qwen 3.6 27B', type: 'Balanced' },
+      { id: 'minimaxai/minimax-m2.7', name: 'Minimax M2.7', type: 'Balanced' },
+      { id: 'openai/gpt-oss-safeguard-20b', name: 'GPT-OSS Safeguard 20B', type: 'Guard' },
+      { id: 'meta-llama/llama-prompt-guard-2-22m', name: 'Llama Prompt Guard 22M', type: 'Guard' },
+      { id: 'meta-llama/llama-prompt-guard-2-86m', name: 'Llama Prompt Guard 86M', type: 'Guard' },
+      { id: 'canopylabs/orpheus-v1-english', name: 'Orpheus v1 English', type: 'Special' },
+      { id: 'canopylabs/orpheus-arabic-saudi', name: 'Orpheus Arabic', type: 'Special' }
     ]
   },
   {
