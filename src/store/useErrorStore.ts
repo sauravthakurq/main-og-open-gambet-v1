@@ -45,8 +45,10 @@ interface ErrorState {
 export const useErrorStore = create<ErrorState>((set) => ({
   currentError: null,
   dispatchError: (error) => {
-    // Log to console centrally as requested
-    console.error(`[GlobalError] ${error.category}: ${error.title} - ${error.message}`, error.developerDetails || '');
+    // Log to console centrally as requested, only in dev mode
+    if (process.env.NODE_ENV !== 'production') {
+      console.error(`[GlobalError] ${error.category}: ${error.title} - ${error.message}`, error.developerDetails || '');
+    }
     
     set({
       currentError: {

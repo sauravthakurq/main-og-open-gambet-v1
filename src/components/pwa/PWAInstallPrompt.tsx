@@ -63,11 +63,14 @@ const CinematicStyles = () => (
   `}} />
 );
 
+// Store prompt event at module level to survive React re-renders and strict mode
+let windowDeferredPrompt: BeforeInstallPromptEvent | null = null;
+
 export const PWAInstallPrompt = () => {
-  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [isInstalled, setIsInstalled] = useState(false);
   const [isAnimatingOut, setIsAnimatingOut] = useState(false);
+  const [showIOSInstructions, setShowIOSInstructions] = useState(false);
 
   useEffect(() => {
     if (window.matchMedia('(display-mode: standalone)').matches) {
@@ -82,21 +85,21 @@ export const PWAInstallPrompt = () => {
 
     const handleBeforeInstallPrompt = (e: Event) => {
       e.preventDefault();
-      setDeferredPrompt(e as BeforeInstallPromptEvent);
+      windowDeferredPrompt = e as BeforeInstallPromptEvent;
       setTimeout(() => setIsOpen(true), 2500);
     };
 
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
 
     const handleManualTrigger = async () => {
-      if (deferredPrompt) {
-        deferredPrompt.prompt();
-        const { outcome } = await deferredPrompt.userChoice;
+      if (windowDeferredPrompt) {
+        windowDeferredPrompt.prompt();
+        const { outcome } = await windowDeferredPrompt.userChoice;
         if (outcome === 'accepted') {
           setIsInstalled(true);
           setIsOpen(false);
         }
-        setDeferredPrompt(null);
+        windowDeferredPrompt = null;
       } else if (!isInstalled) {
         setIsOpen(true);
       }
@@ -105,7 +108,7 @@ export const PWAInstallPrompt = () => {
     const handleAppInstalled = () => {
       setIsInstalled(true);
       setIsOpen(false);
-      setDeferredPrompt(null);
+      windowDeferredPrompt = null;
     };
 
     window.addEventListener('appinstalled', handleAppInstalled);
@@ -116,31 +119,33 @@ export const PWAInstallPrompt = () => {
       window.removeEventListener('show-install-prompt', handleManualTrigger);
       window.removeEventListener('appinstalled', handleAppInstalled);
     };
-  }, [deferredPrompt, isInstalled]);
+  }, [isInstalled]);
 
   const handleClose = () => {
     setIsAnimatingOut(true);
     setTimeout(() => {
       setIsOpen(false);
       setIsAnimatingOut(false);
+      setShowIOSInstructions(false);
       localStorage.setItem('pwa-prompt-dismissed', 'true');
     }, 300);
   };
 
   const handleInstallClick = async () => {
-    if (!deferredPrompt) {
-      alert('To install, tap the Share button in your browser and select "Add to Home Screen".');
+    if (!windowDeferredPrompt) {
+      // Browser doesn't support programmatic install (e.g., iOS Safari)
+      setShowIOSInstructions(true);
       return;
     }
     
-    deferredPrompt.prompt();
-    const { outcome } = await deferredPrompt.userChoice;
+    windowDeferredPrompt.prompt();
+    const { outcome } = await windowDeferredPrompt.userChoice;
     
     if (outcome === 'accepted') {
       setIsInstalled(true);
       setIsOpen(false);
     }
-    setDeferredPrompt(null);
+    windowDeferredPrompt = null;
   };
 
   if (isInstalled && !isOpen && !isAnimatingOut) return null;
@@ -191,45 +196,75 @@ export const PWAInstallPrompt = () => {
           </div>
 
           <div className="flex flex-col items-center w-full px-6 sm:px-10 pb-8">
-            <h2 id="install-title" className="stagger-2 text-2xl sm:text-3xl font-black text-white tracking-tight mb-2.5 text-center relative z-10 drop-shadow-md">
-              Install Open Gambit
-            </h2>
-            <p className="stagger-3 text-white/50 text-[13px] sm:text-[15px] font-medium text-center mb-8 leading-relaxed max-w-[340px] relative z-10">
-              Play AI Chess faster with a native app experience. Instant launch, distraction-free.
-            </p>
-
-            <div className="stagger-4 flex flex-wrap justify-center gap-2 sm:gap-2.5 mb-10 relative z-10 w-full px-2">
-              {features.map((feature, idx) => (
-                <div 
-                  key={idx}
-                  className="flex items-center gap-2 px-3.5 py-2 rounded-full bg-white/[0.03] border border-white/[0.08] hover:bg-white/[0.08] hover:border-white/[0.15] transition-all duration-300 group cursor-default shadow-[inset_0_1px_1px_rgba(255,255,255,0.01)] hover:shadow-[0_4px_12px_rgba(255,255,255,0.05)]"
-                >
-                  <feature.icon className="w-3.5 h-3.5 text-white/50 group-hover:text-white transition-colors" />
-                  <span className="text-[11px] sm:text-[12px] font-semibold text-white/50 group-hover:text-white/90 transition-colors tracking-wide">
-                    {feature.label}
-                  </span>
+            {showIOSInstructions ? (
+              <div className="flex flex-col items-center text-center w-full animate-in fade-in zoom-in duration-300">
+                <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-4">
+                  <Smartphone className="w-8 h-8 text-white/80" />
                 </div>
-              ))}
-            </div>
-
-            <div className="stagger-5 w-full flex flex-col gap-3.5 relative z-10 mt-auto">
-              <button 
-                onClick={handleInstallClick}
-                className="w-full py-4 rounded-[20px] bg-gradient-to-b from-[#ffffff] to-[#e5e5e5] border border-white shadow-[0_8px_24px_rgba(255,255,255,0.15),inset_0_-2px_4px_rgba(0,0,0,0.1)] flex items-center justify-center gap-2.5 group hover:brightness-105 active:scale-[0.98] transition-all btn-glow focus:outline-none"
-              >
-                <Download className="w-[18px] h-[18px] text-black drop-shadow-sm group-hover:-translate-y-0.5 transition-transform" strokeWidth={2.5} />
-                <span className="text-[15px] font-bold text-black tracking-wide">
+                <h2 className="text-xl font-bold text-white mb-2">Install on iOS</h2>
+                <p className="text-white/60 text-sm mb-6 leading-relaxed">
+                  To install Open Gambit on your iPhone or iPad:
+                </p>
+                <div className="flex flex-col gap-3 w-full bg-black/40 rounded-xl p-4 border border-white/5 text-left mb-6">
+                  <div className="flex items-center gap-3">
+                    <span className="flex items-center justify-center w-6 h-6 rounded-full bg-white/10 text-xs font-bold text-white">1</span>
+                    <span className="text-sm text-white/80">Tap the <b>Share</b> button in Safari</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <span className="flex items-center justify-center w-6 h-6 rounded-full bg-white/10 text-xs font-bold text-white">2</span>
+                    <span className="text-sm text-white/80">Scroll down and tap <b>Add to Home Screen</b></span>
+                  </div>
+                </div>
+                <button 
+                  onClick={handleClose}
+                  className="w-full py-3.5 rounded-[20px] bg-white/10 hover:bg-white/20 text-white font-semibold transition-all focus:outline-none"
+                >
+                  Got it
+                </button>
+              </div>
+            ) : (
+              <>
+                <h2 id="install-title" className="stagger-2 text-2xl sm:text-3xl font-black text-white tracking-tight mb-2.5 text-center relative z-10 drop-shadow-md">
                   Install Open Gambit
-                </span>
-              </button>
-              
-              <button 
-                onClick={handleClose}
-                className="w-full py-3.5 rounded-[20px] text-[13px] font-semibold text-white/40 hover:text-white hover:bg-white/[0.06] active:bg-white/[0.1] transition-all focus:outline-none"
-              >
-                Maybe Later
-              </button>
-            </div>
+                </h2>
+                <p className="stagger-3 text-white/50 text-[13px] sm:text-[15px] font-medium text-center mb-8 leading-relaxed max-w-[340px] relative z-10">
+                  Play AI Chess faster with a native app experience. Instant launch, distraction-free.
+                </p>
+
+                <div className="stagger-4 flex flex-wrap justify-center gap-2 sm:gap-2.5 mb-10 relative z-10 w-full px-2">
+                  {features.map((feature, idx) => (
+                    <div 
+                      key={idx}
+                      className="flex items-center gap-2 px-3.5 py-2 rounded-full bg-white/[0.03] border border-white/[0.08] hover:bg-white/[0.08] hover:border-white/[0.15] transition-all duration-300 group cursor-default shadow-[inset_0_1px_1px_rgba(255,255,255,0.01)] hover:shadow-[0_4px_12px_rgba(255,255,255,0.05)]"
+                    >
+                      <feature.icon className="w-3.5 h-3.5 text-white/50 group-hover:text-white transition-colors" />
+                      <span className="text-[11px] sm:text-[12px] font-semibold text-white/50 group-hover:text-white/90 transition-colors tracking-wide">
+                        {feature.label}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="stagger-5 w-full flex flex-col gap-3.5 relative z-10 mt-auto">
+                  <button 
+                    onClick={handleInstallClick}
+                    className="w-full py-4 rounded-[20px] bg-gradient-to-b from-[#ffffff] to-[#e5e5e5] border border-white shadow-[0_8px_24px_rgba(255,255,255,0.15),inset_0_-2px_4px_rgba(0,0,0,0.1)] flex items-center justify-center gap-2.5 group hover:brightness-105 active:scale-[0.98] transition-all btn-glow focus:outline-none"
+                  >
+                    <Download className="w-[18px] h-[18px] text-black drop-shadow-sm group-hover:-translate-y-0.5 transition-transform" strokeWidth={2.5} />
+                    <span className="text-[15px] font-bold text-black tracking-wide">
+                      Install Open Gambit
+                    </span>
+                  </button>
+                  
+                  <button 
+                    onClick={handleClose}
+                    className="w-full py-3.5 rounded-[20px] text-[13px] font-semibold text-white/40 hover:text-white hover:bg-white/[0.06] active:bg-white/[0.1] transition-all focus:outline-none"
+                  >
+                    Maybe Later
+                  </button>
+                </div>
+              </>
+            )}
           </div>
 
         </div>

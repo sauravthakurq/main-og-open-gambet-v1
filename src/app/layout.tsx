@@ -48,6 +48,7 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <head>
+        <link rel="apple-touch-icon" href="/icon-192.png" />
         <link rel="preload" href="/battle.png" as="image" />
         <link rel="preload" href="/think-like-ai.png" as="image" />
       </head>

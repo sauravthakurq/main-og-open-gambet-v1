@@ -83,41 +83,6 @@ export function GlobalErrorModal() {
               </p>
             </div>
 
-            {/* Developer Details Collapsible */}
-            {currentError.developerDetails && (
-              <div className="relative z-10 w-full mb-6">
-                <button 
-                  onClick={() => setShowDevDetails(!showDevDetails)}
-                  className="flex items-center justify-between w-full p-3 rounded-[12px] bg-white/[0.03] hover:bg-white/[0.06] transition-colors border border-white/[0.05]"
-                >
-                  <span className="text-[13px] font-medium text-white/50">Developer Details</span>
-                  <ChevronDown className={`w-4 h-4 text-white/40 transition-transform ${showDevDetails ? 'rotate-180' : ''}`} />
-                </button>
-
-                <AnimatePresence>
-                  {showDevDetails && (
-                    <motion.div 
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: 'auto', opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      className="overflow-hidden"
-                    >
-                      <div className="pt-3 pb-1 px-1 space-y-2">
-                        {Object.entries(currentError.developerDetails).map(([key, value]) => {
-                          if (!value) return null;
-                          return (
-                            <div key={key} className="flex flex-col">
-                              <span className="text-[11px] text-white/30 uppercase tracking-wider font-semibold">{key.replace(/([A-Z])/g, ' $1').trim()}</span>
-                              <span className="text-[13px] text-white/70 font-mono break-all">{value}</span>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            )}
 
             {/* Actions */}
             <div className="relative z-10 flex flex-col w-full gap-2.5 mt-auto">
