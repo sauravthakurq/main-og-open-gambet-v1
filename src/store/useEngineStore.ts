@@ -4,7 +4,7 @@ import { StockfishEngine, EngineInfo } from '@/lib/StockfishEngine';
 export type AIConnectionState = 
   | 'Connected' | 'Connecting' | 'Invalid API Key' 
   | 'Timeout' | 'Rate Limited' | 'API Error' 
-  | 'Network Offline' | 'Invalid Response' | 'Cancelled';
+  | 'Network Offline' | 'Invalid Response' | 'Cancelled' | 'Retrying...';
 
 interface EngineState {
   engine: StockfishEngine | null;
@@ -36,6 +36,8 @@ interface EngineState {
   recordResponseTime: (timeMs: number) => void;
   setAbortController: (controller: AbortController | null) => void;
   cancelAIRequest: () => void;
+  /** Full reset for a new game session — aborts any pending request and clears all thinking state */
+  resetEngineState: () => void;
   triggerRetry: () => void;
 }
 
@@ -140,12 +142,28 @@ export const useEngineStore = create<EngineState>((set, get) => ({
     const { abortController } = get();
     if (abortController) {
       abortController.abort();
-      set({ 
-        abortController: null, 
-        isThinking: false,
-        connectionState: 'Cancelled' 
-      });
     }
+    set(state => ({ 
+      abortController: null, 
+      isThinking: false,
+      connectionState: 'Cancelled',
+      // Bump retryCount so the AI loop re-runs on the next game even if FEN is same
+      retryCount: state.retryCount + 1,
+    }));
+  },
+
+  resetEngineState: () => {
+    const { abortController } = get();
+    if (abortController) {
+      abortController.abort();
+    }
+    set(state => ({
+      abortController: null,
+      isThinking: false,
+      connectionState: 'Connected',
+      // Bump retryCount to guarantee the AI loop effect re-fires for the new game
+      retryCount: state.retryCount + 1,
+    }));
   },
 
   triggerRetry: () => {

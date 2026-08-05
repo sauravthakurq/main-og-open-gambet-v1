@@ -5,18 +5,15 @@ import { useRouter, usePathname } from 'next/navigation';
 import { 
   RotateCcw, RotateCw, Sparkles, Activity, Radio,
   RefreshCcw, Palette, Settings2, RefreshCw, ChevronDown,
-  Maximize, Minimize, Volume2, VolumeX, Home
+  Maximize, Minimize, Volume2, VolumeX, Home, GraduationCap
 } from 'lucide-react';
 import { useGameStore } from '@/store/useGameStore';
 import { useAppStore } from '@/store/useAppStore';
 import { NotificationCenter } from '@/components/layout/NotificationCenter';
 import { SettingsModal } from '@/components/settings/SettingsModal';
 import { SparkleIcon } from '@/components/icons/SparkleIcon';
-import { GambitAIWorkspace } from '@/components/ai/GambitAIWorkspace';
 import { useGambitAIStore } from '@/store/useGambitAIStore';
 import { useLearningStore } from '@/store/useLearningStore';
-import { LearningWorkspace } from '@/components/learning/LearningWorkspace';
-import { GraduationCap } from 'lucide-react';
 import { Orb } from '../../../orb';
 import { ProfileDropdown } from '@/components/layout/ProfileDropdown';
 import { signInWithGoogle, signInAsGuest } from '@/hooks/useFirebaseAuth';
@@ -158,48 +155,43 @@ export default function HomeNavbar() {
   if (appState === 'playing') return null;
 
   return (
-    <header className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-7xl h-[60px] flex items-center justify-between px-2 sm:px-4 rounded-2xl border border-white/[0.08] bg-black/40 backdrop-blur-2xl shadow-2xl transition-all duration-150">
+    <header className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-7xl h-[60px] flex items-center justify-between px-3 sm:px-4 bg-transparent transition-all duration-150">
       
-      {/* Left: Back Button (Only on non-home pages) */}
-      <div className="flex items-center w-1/3">
-        {pathname !== '/' && (
-          <button 
-            onClick={() => router.push('/')}
-            className="flex items-center gap-2 px-3 py-2 text-white/60 hover:text-white hover:bg-white/10 rounded-xl transition-all duration-200 group"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="group-hover:-translate-x-1 transition-transform">
-              <path d="m15 18-6-6 6-6"/>
-            </svg>
-            <span className="font-medium text-sm hidden sm:block">Back</span>
-          </button>
-        )}
-      </div>
-
-      {/* Center: Branding */}
-      <div className="flex items-center justify-center gap-3 w-1/3 cursor-pointer group" onClick={() => setAppState('onboarding')}>
-        <img alt="Logo" className="w-8 h-8 object-contain transition-transform duration-150 group-hover:scale-110 group-hover:rotate-3 shrink-0" draggable="false" src="/logo.png" />
-        <div className="hidden sm:flex flex-col text-center">
-          <span className="text-[14px] font-bold text-white leading-none tracking-wide group-hover:text-white/90 transition-colors">Open Gambit</span>
-          <span className="text-[9px] font-semibold text-[#b58863] uppercase tracking-[0.15em] leading-none mt-[3px]">CHESS AI</span>
+      {/* Left: Branding */}
+      <div className="flex items-center justify-start gap-2.5 w-auto cursor-pointer group" onClick={() => setAppState('onboarding')}>
+        <img alt="Logo" className="w-9 h-9 sm:w-10 sm:h-10 object-contain transition-transform duration-150 group-hover:scale-110 group-hover:rotate-3 shrink-0" draggable="false" src="/logo.png" />
+        <div className="flex flex-col text-left">
+          <span className="text-[15px] sm:text-[17px] font-extrabold text-white leading-none tracking-wide group-hover:text-white/90 transition-colors drop-shadow-sm">Open Gambit</span>
+          <span className="text-[9px] sm:text-[10px] font-bold text-[#b58863] uppercase tracking-[0.15em] leading-none mt-[3px] drop-shadow-sm">CHESS AI</span>
         </div>
       </div>
 
-      {/* Right: Actions & Profile */}
-      <div className="flex items-center justify-end w-1/3 gap-1 sm:gap-2 relative">
+      {/* Right: Actions & "Get app" */}
+      <div className="flex items-center justify-end w-auto gap-1 sm:gap-2 relative">
+        <a id="navAppBtn" onClick={() => window.dispatchEvent(new Event('show-install-prompt'))} className="group relative z-0 border border-white/10 inline-flex justify-center items-center rounded-full font-medium gap-[.3em] disabled:pointer-events-none disabled:opacity-30 text-center py-[.25em] transition-all text-white bg-white/5 hover:bg-white/10 active:scale-[.96] text-[11px] sm:text-[12px] min-h-7 sm:min-h-8 px-3 leading-[1.125] cursor-pointer mr-1">
+            <span className="contents">
+                <svg xmlns="http://www.w3.org/2000/svg" width="9" height="13" viewBox="0 0 9 13" fill="none">
+                    <rect x="0.4" y="0.4" width="8.2" height="12.2" rx="0.6" stroke="white" strokeWidth="0.8"></rect>
+                    <path d="M5 2H4" stroke="white" strokeWidth="0.8" strokeLinecap="round"></path>
+                    <path d="M3 11H6" stroke="white" strokeWidth="0.8" strokeLinecap="round"></path>
+                </svg>
+                <span className="ml-1.5">Get app</span>
+            </span>
+        </a>
         <NavButton icon={Radio} label="Watch Live" color="#ef4444" onClick={() => router.push('/watch-live')} />
-        <NavButton icon={GraduationCap} label="Learn" onClick={() => {
-            const store = useLearningStore.getState();
-            store.setWorkspaceOpen(!store.isWorkspaceOpen);
-        }} />
+        <div className="hidden sm:block">
+          <NavButton icon={GraduationCap} label="Learn" onClick={() => {
+              const store = useLearningStore.getState();
+              store.setWorkspaceOpen(!store.isWorkspaceOpen);
+          }} />
+        </div>
         <GambitAINavButton onClick={() => setWorkspaceOpen(true)} />
         <div className="w-px h-5 bg-white/10 mx-1 hidden sm:block" />
         
-        {/* Settings Modal Component */}
-      <ProfileDropdown onOpenSettings={() => setShowSettingsMenu(true)} />
-      <SettingsModal isOpen={showSettingsMenu} onClose={() => setShowSettingsMenu(false)} />
-        <GambitAIWorkspace />
-        <LearningWorkspace />
+        <ProfileDropdown onOpenSettings={() => setShowSettingsMenu(true)} />
+        <SettingsModal isOpen={showSettingsMenu} onClose={() => setShowSettingsMenu(false)} />
       </div>
+
     </header>
   );
 }

@@ -35,10 +35,12 @@ export default function CapturedPieces({ color }: CapturedPiecesProps) {
     }
   });
 
-  if (pieceCounts.length === 0 && adv <= 0) return null;
+  if (pieceCounts.length === 0 && adv <= 0) {
+    return <div className="h-[28px] w-full shrink-0 mt-1"></div>;
+  }
 
   return (
-    <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar max-w-full py-1 mt-1">
+    <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar max-w-full py-1 mt-1 h-[28px] shrink-0">
       {pieceCounts.map(({ type, count }, i) => (
         <div key={i} className="flex items-center gap-0.5 bg-black/40 rounded-md px-1.5 py-0.5 border border-white/10 backdrop-blur-md shadow-sm shrink-0">
           <svg 

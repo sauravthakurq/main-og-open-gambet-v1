@@ -206,7 +206,7 @@ export default function Home() {
                       exit={{ scale: 0.9, opacity: 0, y: 20 }}
                       transition={{ type: "spring", bounce: 0.4, duration: 0.5 }}
                       onClick={(e) => e.stopPropagation()}
-                      className="relative z-[101] w-full max-w-[1000px] h-[92vh] max-h-[780px] min-h-[540px]"
+                      className="relative z-[101] w-full max-w-[1000px] h-[92vh] max-h-[780px] min-h-[540px] flex flex-col min-w-0 overflow-hidden"
                     >
                       <AISettingsPanel onClose={() => setShowSettings(false)} />
                     </motion.div>

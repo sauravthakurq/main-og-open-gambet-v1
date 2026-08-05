@@ -9,6 +9,7 @@ import { ThemeInjector } from "@/components/board/ThemeInjector";
 import { ServiceWorkerRegister } from "@/components/pwa/ServiceWorkerRegister";
 import { PWAInstallPrompt } from "@/components/pwa/PWAInstallPrompt";
 import { OfflineBanner } from "@/components/pwa/OfflineBanner";
+import { GlobalWorkspaces } from "@/components/layout/GlobalWorkspaces";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -59,6 +60,9 @@ export default function RootLayout({
         <ConfirmationModal />
         <ConnectionBadge />
         <PWAInstallPrompt />
+        {/* Global workspace overlays — always mounted so they can open from any screen
+            including during active gameplay. z-index 9999 ensures they appear above everything. */}
+        <GlobalWorkspaces />
       </body>
     </html>
   );

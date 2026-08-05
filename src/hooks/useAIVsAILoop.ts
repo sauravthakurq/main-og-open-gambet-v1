@@ -19,6 +19,7 @@ import { useGameStore } from '@/store/useGameStore';
 import { useAISettingsStore } from '@/store/useAISettingsStore';
 import { useEngineStore } from '@/store/useEngineStore';
 import { useAppStore } from '@/store/useAppStore';
+import { useErrorStore } from '@/store/useErrorStore';
 
 const INTER_MOVE_DELAY_MS = 700;   // pause between moves for natural feel
 const ERROR_RETRY_DELAY_MS = 2500; // wait before retrying after error
@@ -248,8 +249,28 @@ export function useAIVsAILoop(gameKey: number) {
               continue;
             }
 
+            if (res.status === 400 || res.status === 404) {
+              engine.setConnectionState('API Error');
+              useErrorStore.getState().dispatchError({
+                category: 'AI',
+                title: 'Unsupported Model',
+                message: `The provider ${provider} does not support the model '${model}' or your API key lacks access to it.`,
+                developerDetails: { provider, model, endpoint: baseUrl, httpStatus: res.status, timestamp: new Date().toISOString() },
+                actions: [{ label: 'Dismiss', onClick: () => {} }]
+              });
+              throw new Error('Invalid Model');
+            }
+
             if (res.status === 401) {
               engine.setConnectionState('Invalid API Key');
+              useAISettingsStore.getState().setIsConnected(false);
+              useErrorStore.getState().dispatchError({
+                category: 'Authentication',
+                title: 'Invalid or Expired API Key',
+                message: `Authentication failed. The API key for ${provider} was rejected by the provider.`,
+                developerDetails: { provider, model, endpoint: baseUrl, httpStatus: 401, timestamp: new Date().toISOString() },
+                actions: [{ label: 'Update API Key', primary: true, onClick: () => {} }, { label: 'Dismiss', onClick: () => {} }]
+              });
               throw new Error('Invalid API Key');
             }
 
@@ -294,7 +315,7 @@ export function useAIVsAILoop(gameKey: number) {
               engine.setConnectionState('Cancelled');
               break;
             }
-            if (err.message === 'Invalid API Key') {
+            if (err.message === 'Invalid API Key' || err.message === 'Invalid Model') {
               break;
             }
             if (!navigator.onLine) {
@@ -307,6 +328,13 @@ export function useAIVsAILoop(gameKey: number) {
             errorPrompt = `\nPrevious attempt failed. Please evaluate the board again and return exactly one UCI move string.`;
             if (attempt >= 3) {
               engine.setConnectionState('API Error');
+              useErrorStore.getState().dispatchError({
+                category: 'AI',
+                title: 'AI Generation Failed',
+                message: err.message || `Something went wrong while contacting ${provider}.`,
+                developerDetails: { provider, model, endpoint: baseUrl, internalErrorType: 'APIError', timestamp: new Date().toISOString(), errorCode: err.message },
+                actions: [{ label: 'Change Provider', primary: true, onClick: () => {} }, { label: 'Dismiss', onClick: () => {} }]
+              });
             }
           }
         }

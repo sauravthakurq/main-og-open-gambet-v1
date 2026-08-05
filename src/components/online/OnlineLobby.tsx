@@ -1,11 +1,12 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Globe, Zap, Users, Trophy, Clock, ArrowRight,
   ChevronRight, Wifi, Crown, LogOut, User, Activity, Swords, Hash
 } from 'lucide-react';
+import { useAndroidBack } from '@/hooks/useAndroidBack';
 import { collection, query, where, orderBy, limit, onSnapshot, addDoc, serverTimestamp, Timestamp } from 'firebase/firestore';
 import { ref, onValue } from 'firebase/database';
 import { db, rtdb, isFirebaseConfigured } from '@/lib/firebase';
@@ -34,6 +35,14 @@ export default function OnlineLobby({ onBack }: OnlineLobbyProps) {
   const [isCreating, setIsCreating] = useState(false);
   const [ping] = useState(() => Math.floor(Math.random() * 20) + 15);
 
+  useAndroidBack('online-lobby', () => {
+    if (view !== 'lobby') {
+      setView('lobby');
+    } else {
+      onBack();
+    }
+  }, true);
+
   useEffect(() => {
     if (!isFirebaseConfigured) return;
     if (rtdb) {
@@ -60,11 +69,33 @@ export default function OnlineLobby({ onBack }: OnlineLobbyProps) {
     return () => { unsub(); lbUnsub(); };
   }, []);
 
-  const handleGatedAction = (action: () => void) => {
-    audioManager.play('select');
-    if (!firebaseUser) setShowAuth(true);
-    else action();
+  type ActionType = 'quickmatch' | 'create' | 'join';
+  const [pendingAction, setPendingAction] = useState<ActionType | null>(null);
+
+  const executeAction = (type: ActionType) => {
+    if (type === 'quickmatch') setView('quickmatch');
+    else if (type === 'create') handleCreateRoom();
+    else if (type === 'join') setView('join');
   };
+
+  const handleGatedAction = (type: ActionType) => {
+    audioManager.play('select');
+    if (!firebaseUser) {
+      setPendingAction(type);
+      setShowAuth(true);
+    } else {
+      executeAction(type);
+    }
+  };
+
+  useEffect(() => {
+    if (firebaseUser && pendingAction) {
+      const action = pendingAction;
+      setPendingAction(null);
+      setShowAuth(false);
+      executeAction(action);
+    }
+  }, [firebaseUser, pendingAction]);
 
   const handleCreateRoom = async () => {
     if (!isFirebaseConfigured || !db || !firebaseUser || !userProfile) return;
@@ -95,15 +126,22 @@ export default function OnlineLobby({ onBack }: OnlineLobbyProps) {
   }
 
   return (
-    <div className="w-full h-full min-h-[calc(100vh-100px)] max-w-[1200px] mx-auto relative px-4 sm:px-6 flex flex-col">
-      <AnimatePresence>{showAuth && <AuthModal onClose={() => setShowAuth(false)} onSuccess={() => setShowAuth(false)} />}</AnimatePresence>
+    <div className="w-full h-full max-h-full max-w-[1200px] mx-auto relative px-3 sm:px-6 flex flex-col overflow-hidden">
+      <AnimatePresence>
+        {showAuth && (
+          <AuthModal 
+            onClose={() => { setShowAuth(false); setPendingAction(null); }} 
+            onSuccess={() => setShowAuth(false)} 
+          />
+        )}
+      </AnimatePresence>
 
-      <AnimatePresence mode="wait">
+      <AnimatePresence>
         {view === 'lobby' && (
-          <motion.div key="lobby" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.2 }} className="flex flex-col gap-6 py-6 flex-1">
+          <motion.div key="lobby" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.15 }} className="flex flex-col flex-1 h-full overflow-hidden">
             
-            {/* Header Area */}
-            <div className="flex items-center justify-between">
+            {/* Header Area - Fixed at top */}
+            <div className="flex items-center justify-between py-4 px-1 shrink-0">
               <button onClick={() => { audioManager.play('select'); onBack(); }} className="text-white/50 hover:text-white text-sm font-semibold flex items-center gap-2 transition-colors bg-white/5 hover:bg-white/10 px-4 py-2 rounded-xl backdrop-blur-sm">
                 ← Back
               </button>
@@ -123,29 +161,33 @@ export default function OnlineLobby({ onBack }: OnlineLobbyProps) {
               </div>
             </div>
 
-            {/* AAA Hero Section */}
-            <div className="relative w-full rounded-[32px] overflow-hidden border border-white/10 bg-gradient-to-br from-black/80 to-black/40 backdrop-blur-3xl shadow-2xl p-6 sm:p-8 lg:p-12 flex flex-col justify-end min-h-[220px] sm:min-h-[280px]">
-              <div className="absolute inset-0 bg-[url('/bg.webp')] opacity-20 bg-cover bg-center mix-blend-overlay" />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-transparent" />
-              <div className="absolute top-0 right-0 w-[80%] sm:w-[60%] h-[100%] bg-[radial-gradient(ellipse_at_top_right,var(--color-accent-dim),transparent_70%)] pointer-events-none" />
-              
-              <div className="relative z-10">
-                <div className="flex flex-wrap items-center gap-3 mb-3">
-                  <div className="px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 text-[10px] sm:text-xs font-black uppercase tracking-widest flex items-center gap-2 shadow-[0_0_12px_rgba(16,185,129,0.2)]">
-                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                    Connected
+            {/* Fixed Fit-to-screen Content */}
+            <div className="flex-1 flex flex-col justify-between gap-3 sm:gap-4 overflow-hidden px-1">
+              {/* AAA Hero Section - Ultra Sleek & Thin */}
+              <div className="relative w-full rounded-[20px] sm:rounded-[24px] overflow-hidden border border-white/10 bg-gradient-to-br from-black/80 to-black/40 backdrop-blur-3xl shadow-xl p-3.5 sm:p-5 flex flex-col justify-center">
+                <div className="absolute inset-0 bg-[url('/bg.webp')] opacity-15 bg-cover bg-center mix-blend-overlay" />
+                <div className="absolute inset-0 bg-gradient-to-r from-[#0a0a0a] via-black/40 to-transparent" />
+                <div className="absolute top-0 right-0 w-[60%] h-[100%] bg-[radial-gradient(ellipse_at_top_right,var(--color-accent-dim),transparent_70%)] pointer-events-none" />
+                
+                <div className="relative z-10 w-full min-w-0 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                  <div>
+                    <div className="flex flex-wrap items-center gap-2 mb-1">
+                      <div className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 text-[9px] sm:text-[10px] font-black uppercase tracking-widest flex items-center gap-1.5 shadow-[0_0_12px_rgba(16,185,129,0.2)]">
+                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                        Connected
+                      </div>
+                      <span className="text-white/40 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest flex items-center gap-1">
+                        <Globe size={11} /> Global Server • {ping}ms
+                      </span>
+                    </div>
+                    <h1 className="text-xl sm:text-2xl lg:text-3xl font-black text-white tracking-tight drop-shadow-lg">Play Online</h1>
                   </div>
-                  <span className="text-white/40 text-[10px] sm:text-xs font-bold uppercase tracking-widest flex items-center gap-1.5">
-                    <Globe size={12} /> Global Server • {ping}ms
-                  </span>
+                  <p className="text-white/50 text-xs font-medium max-w-sm leading-snug hidden md:block">Compete worldwide, climb ranks, and challenge your friends in real-time matches.</p>
                 </div>
-                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight mb-2 drop-shadow-lg">Play Online</h1>
-                <p className="text-white/50 text-xs sm:text-sm lg:text-base font-medium max-w-md leading-relaxed hidden sm:block">Compete with players worldwide. Climb the ranks, challenge your friends, and master your opening repertoire in real-time matches.</p>
               </div>
-            </div>
 
             {/* Strict CSS Grid Layout for Stats and Actions */}
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-4 sm:gap-6 flex-1 min-h-0">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-3 sm:gap-4 w-full flex-1 min-h-0">
               
               {/* Left Column (Stats & Actions) */}
               <div className="md:col-span-7 lg:col-span-8 flex flex-col gap-4 sm:gap-6 min-w-0">
@@ -159,47 +201,47 @@ export default function OnlineLobby({ onBack }: OnlineLobbyProps) {
 
                 {/* Primary Action - Quick Match */}
                 <button 
-                  onClick={() => handleGatedAction(() => setView('quickmatch'))}
-                  className="group relative w-full rounded-[24px] sm:rounded-[32px] p-5 sm:p-8 bg-gradient-to-br from-white/[0.08] to-transparent border border-white/10 hover:border-[var(--color-accent)]/50 transition-all flex items-center justify-between overflow-hidden shadow-xl hover:shadow-[0_8px_32px_var(--color-accent-dim)] hover:-translate-y-1 active:translate-y-0"
+                  onClick={() => handleGatedAction('quickmatch')}
+                  className="group relative w-full rounded-[20px] sm:rounded-[28px] p-3.5 sm:p-5 bg-gradient-to-br from-white/[0.08] to-transparent border border-white/10 hover:border-[var(--color-accent)]/50 transition-all flex items-center justify-between overflow-hidden shadow-xl hover:shadow-[0_8px_32px_var(--color-accent-dim)] active:scale-[0.99]"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-r from-[var(--color-accent)]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-150" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-amber-500/30 via-amber-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-[inset_0_0_40px_rgba(245,158,11,0.2)]" />
                   
-                  <div className="flex items-center gap-4 sm:gap-6 relative z-10 min-w-0">
-                    <div className="shrink-0 w-12 h-12 sm:w-16 sm:h-16 rounded-xl sm:rounded-2xl bg-[var(--color-accent)]/20 border border-[var(--color-accent)]/30 flex items-center justify-center shadow-inner group-hover:scale-110 transition-transform">
-                      <Zap size={24} className="text-[var(--color-accent)] sm:w-7 sm:h-7" />
+                  <div className="flex items-center gap-3 sm:gap-5 relative z-10 min-w-0">
+                    <div className="shrink-0 w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-[var(--color-accent)]/20 border border-[var(--color-accent)]/30 flex items-center justify-center shadow-inner group-hover:scale-105 transition-transform">
+                      <Zap size={20} className="text-[var(--color-accent)] sm:w-6 sm:h-6" />
                     </div>
                     <div className="flex flex-col text-left min-w-0">
-                      <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-1">
-                        <span className="text-xl sm:text-2xl lg:text-3xl font-black text-white tracking-tight drop-shadow-md truncate">Quick Match</span>
+                      <div className="flex flex-wrap items-center gap-2 mb-0.5">
+                        <span className="text-lg sm:text-2xl font-black text-white tracking-tight drop-shadow-md truncate">Quick Match</span>
                         <span className="px-2 py-0.5 rounded-full bg-[var(--color-accent)]/20 text-[var(--color-accent)] text-[9px] sm:text-[10px] font-bold uppercase tracking-widest shrink-0 hidden sm:inline-block">Recommended</span>
                       </div>
-                      <span className="text-xs sm:text-sm font-medium text-white/50 truncate">Find an opponent instantly based on rating</span>
+                      <span className="text-xs font-medium text-white/50 truncate">Find an opponent instantly based on rating</span>
                     </div>
                   </div>
                   
-                  <ChevronRight size={24} className="text-white/20 group-hover:text-white/80 group-hover:translate-x-2 transition-all relative z-10 shrink-0 sm:w-7 sm:h-7" />
+                  <ChevronRight size={20} className="text-white/20 group-hover:text-white/80 group-hover:translate-x-1.5 transition-all relative z-10 shrink-0 sm:w-6 sm:h-6" />
                 </button>
 
                 {/* Secondary Actions (Side by Side) */}
-                <div className="grid grid-cols-2 gap-2 sm:gap-4 flex-1">
+                <div className="grid grid-cols-2 gap-2 sm:gap-3 shrink-0">
                   <SecondaryAction
                     icon={Users}
                     title={isCreating ? "Creating..." : "Create Room"}
                     description="Private match"
-                    onClick={() => handleGatedAction(handleCreateRoom)}
+                    onClick={() => handleGatedAction('create')}
                   />
                   <SecondaryAction
                     icon={Hash}
                     title="Join Room"
                     description="Use 6-digit code"
-                    onClick={() => handleGatedAction(() => setView('join'))}
+                    onClick={() => handleGatedAction('join')}
                   />
                 </div>
               </div>
 
               {/* Right Column (Leaderboard) */}
-              <div className="md:col-span-5 lg:col-span-4 flex flex-col min-w-0 h-full">
-                <div className="w-full bg-black/40 border border-white/10 rounded-[24px] sm:rounded-[32px] p-5 sm:p-6 backdrop-blur-xl shadow-xl flex flex-col h-full min-h-[300px]">
+              <div className="md:col-span-5 lg:col-span-4 flex flex-col min-w-0">
+                <div className="w-full bg-black/40 border border-white/10 rounded-[24px] sm:rounded-[32px] p-5 sm:p-6 backdrop-blur-xl shadow-xl flex flex-col min-h-[250px] max-h-[500px] overflow-hidden">
                   <div className="flex items-center justify-between mb-5">
                     <div className="flex items-center gap-2">
                       <Trophy size={16} className="text-[var(--color-accent)]" />
@@ -233,7 +275,8 @@ export default function OnlineLobby({ onBack }: OnlineLobbyProps) {
               </div>
 
             </div>
-          </motion.div>
+          </div>
+        </motion.div>
         )}
 
         {view === 'quickmatch' && <QuickMatch onBack={() => setView('lobby')} />}
@@ -248,11 +291,11 @@ export default function OnlineLobby({ onBack }: OnlineLobbyProps) {
 function StatCard({ icon: Icon, label, value, highlight = false }: any) {
   return (
     <div className={`relative p-3 sm:p-5 rounded-[20px] sm:rounded-3xl border flex flex-col justify-center overflow-hidden transition-colors ${highlight ? 'bg-gradient-to-br from-[var(--color-accent)]/20 to-[var(--color-accent)]/5 border-[var(--color-accent)]/30' : 'bg-black/40 border-white/10'}`}>
-      <div className="flex items-center gap-1.5 sm:gap-2 mb-1 sm:mb-2 relative z-10">
-        <Icon size={12} className={`sm:w-3.5 sm:h-3.5 ${highlight ? 'text-[var(--color-accent)]' : 'text-white/40'}`} />
+      <div className="flex items-center gap-1.5 sm:gap-2 mb-1 sm:mb-2 relative z-10 min-w-0">
+        <Icon size={12} className={`shrink-0 sm:w-3.5 sm:h-3.5 ${highlight ? 'text-[var(--color-accent)]' : 'text-white/40'}`} />
         <span className={`text-[9px] sm:text-[10px] font-bold uppercase tracking-widest truncate ${highlight ? 'text-[var(--color-accent)]' : 'text-white/40'}`}>{label}</span>
       </div>
-      <span className={`text-xl sm:text-3xl font-black tracking-tight tabular-nums relative z-10 truncate ${highlight ? 'text-[var(--color-accent)] drop-shadow-md' : 'text-white'}`}>{value}</span>
+      <span className={`text-lg sm:text-3xl font-black tracking-tight tabular-nums relative z-10 truncate ${highlight ? 'text-[var(--color-accent)] drop-shadow-md' : 'text-white'}`}>{value}</span>
       {highlight && <div className="absolute -bottom-4 -right-4 w-16 h-16 sm:w-24 sm:h-24 bg-[var(--color-accent)] blur-[30px] opacity-20 pointer-events-none" />}
     </div>
   );
@@ -262,14 +305,14 @@ function SecondaryAction({ icon: Icon, title, description, onClick }: any) {
   return (
     <button 
       onClick={onClick}
-      className="group relative flex flex-col justify-between p-4 sm:p-6 rounded-[20px] sm:rounded-[32px] bg-black/40 border border-white/10 hover:border-white/30 transition-all text-left overflow-hidden hover:-translate-y-1 active:translate-y-0 min-h-[100px] sm:min-h-[140px]"
+      className="group relative flex flex-col justify-between p-3 sm:p-5 rounded-[20px] sm:rounded-[28px] bg-black/40 border border-white/10 hover:border-white/30 transition-colors text-left overflow-hidden active:scale-[0.98] min-h-[80px] sm:min-h-[110px]"
     >
-      <div className="w-8 h-8 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-white/5 border border-white/10 flex items-center justify-center mb-2 sm:mb-4 group-hover:scale-110 group-hover:bg-white/10 transition-all shrink-0">
-        <Icon size={16} className="text-white/70 group-hover:text-white sm:w-5 sm:h-5" />
+      <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-white/5 border border-white/10 flex items-center justify-center mb-1.5 sm:mb-3 group-hover:scale-105 group-hover:bg-white/10 transition-transform shrink-0">
+        <Icon size={16} className="text-white/70 group-hover:text-white sm:w-5 sm:h-5 shrink-0" />
       </div>
-      <div className="flex flex-col min-w-0">
-        <span className="font-bold text-white text-sm sm:text-lg tracking-wide mb-0.5 sm:mb-1 truncate">{title}</span>
-        <span className="text-[10px] sm:text-xs text-white/40 font-medium truncate">{description}</span>
+      <div className="flex flex-col min-w-0 w-full">
+        <span className="font-bold text-white text-xs sm:text-lg tracking-wide mb-0.5 sm:mb-1 truncate w-full">{title}</span>
+        <span className="text-[9px] sm:text-xs text-white/40 font-medium truncate w-full">{description}</span>
       </div>
     </button>
   );

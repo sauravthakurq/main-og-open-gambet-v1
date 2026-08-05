@@ -19,6 +19,7 @@ interface AISettingsState {
   maxTokens: Record<string, number>;
   isConnected: boolean;
   customModels: Record<string, string[]>;
+  providerModels: Record<string, string>;
   
   // Actions
   setEngineType: (type: 'cloud' | 'local') => void;
@@ -33,6 +34,7 @@ interface AISettingsState {
   setMaxTokens: (provider: string, tokens: number) => void;
   setIsConnected: (status: boolean) => void;
   addCustomModel: (provider: string, model: string) => void;
+  setProviderModel: (provider: string, model: string) => void;
 }
 
 export const useAISettingsStore = create<AISettingsState>()(
@@ -48,6 +50,7 @@ export const useAISettingsStore = create<AISettingsState>()(
       maxTokens: {},
       isConnected: false,
       customModels: {},
+      providerModels: {},
 
       setEngineType: (type) => set({ engineType: type }),
       setProvider: (provider) => set({ provider }),
@@ -89,6 +92,9 @@ export const useAISettingsStore = create<AISettingsState>()(
         if (models.includes(model)) return state;
         return { customModels: { ...state.customModels, [provider]: [...models, model] } };
       }),
+      setProviderModel: (provider, model) => set((state) => ({
+        providerModels: { ...state.providerModels, [provider]: model }
+      })),
     }),
     {
       name: 'open-gambit-ai-settings', // unique name in localStorage
@@ -101,7 +107,8 @@ export const useAISettingsStore = create<AISettingsState>()(
         temperatures: state.temperatures,
         maxTokens: state.maxTokens,
         engineType: state.engineType,
-        isConnected: state.isConnected
+        isConnected: state.isConnected,
+        providerModels: state.providerModels
       }),
       version: 1,
       migrate: (persistedState: any, version: number) => {

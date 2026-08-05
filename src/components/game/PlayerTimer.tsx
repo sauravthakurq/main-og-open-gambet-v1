@@ -20,14 +20,14 @@ export default function PlayerTimer({ color, isActive }: { color: 'w' | 'b', isA
 
   if (isUnlimited) {
     return (
-      <span className={`font-mono text-[28px] sm:text-[36px] font-light leading-none tracking-tighter shrink-0 ${isActive ? 'text-white/80' : 'text-white/30'}`}>
+      <div className={`font-mono text-[28px] sm:text-[36px] font-light leading-tight tracking-tighter shrink-0 pb-1 ${isActive ? 'text-white/80' : 'text-white/30'}`}>
         ∞
-      </span>
+      </div>
     );
   }
 
   return (
-    <span className={`font-mono text-[30px] sm:text-[38px] font-light leading-none tracking-tighter shrink-0 transition-colors ${
+    <div className={`font-mono text-[30px] sm:text-[38px] font-light leading-tight tracking-tighter shrink-0 transition-colors pb-1 ${
       isLowTime && isActive
         ? 'text-red-400 animate-pulse drop-shadow-[0_0_12px_rgba(248,113,113,0.6)]'
         : isActive 
@@ -35,6 +35,6 @@ export default function PlayerTimer({ color, isActive }: { color: 'w' | 'b', isA
           : 'text-white/40'
     }`}>
       {formatTime(time)}
-    </span>
+    </div>
   );
 }

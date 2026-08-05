@@ -60,7 +60,7 @@ export const useAndroidBack = (
           if ((navigator as any).app) {
              (navigator as any).app.exitApp();
           } else {
-             window.close();
+             window.location.href = 'https://ogopengambit.vercel.app';
           }
         } else {
           lastBackPressTime = currentTime;

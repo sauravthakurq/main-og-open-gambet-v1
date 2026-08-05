@@ -49,9 +49,20 @@ export async function POST(req: Request) {
       return new Response(JSON.stringify({ error: 'API key is required' }), { status: 400 });
     }
 
-    let llmModel;
     const finalBaseUrl = baseUrl || DEFAULT_BASE_URLS[provider] || undefined;
+    
+    // Mask API key for secure logging
+    const maskedKey = apiKey && apiKey.length > 8 
+      ? `${apiKey.substring(0, 4)}...${apiKey.substring(apiKey.length - 4)}` 
+      : (apiKey ? 'Provided (Short)' : 'None');
+      
+    console.log(`\n[AI Provider Request]`);
+    console.log(`- Provider: ${provider}`);
+    console.log(`- Model: ${model}`);
+    console.log(`- Endpoint: ${finalBaseUrl || 'Default for provider'}`);
+    console.log(`- Auth Header Present: ${maskedKey}`);
 
+    let llmModel;
     if (provider === 'OpenAI') {
       const openai = createOpenAI({
         apiKey,
@@ -62,18 +73,20 @@ export async function POST(req: Request) {
     } else if (provider === 'Anthropic') {
       const anthropic = createAnthropic({
         apiKey,
-        baseURL: finalBaseUrl,
+        // Use default Anthropic endpoint — custom baseUrl rarely needed
+        baseURL: finalBaseUrl || 'https://api.anthropic.com/v1',
       });
       llmModel = anthropic(model);
     } else if (provider === 'Google') {
       const google = createGoogleGenerativeAI({
         apiKey,
-        baseURL: finalBaseUrl,
+        // Google SDK uses its own base URL, don't override unless explicitly set
+        ...(finalBaseUrl && finalBaseUrl !== 'https://generativelanguage.googleapis.com/v1beta' ? { baseURL: finalBaseUrl } : {}),
       });
       llmModel = google(model);
     } else {
-      // For all other providers (DeepSeek, xAI, Groq, Mistral, OpenRouter, etc)
-      // we assume OpenAI compatibility via baseURL and API key.
+      // For all other providers (DeepSeek, xAI, Groq, Mistral, OpenRouter, Cohere, Custom, etc)
+      // OpenAI-compatible REST API via baseURL
       const compatibleProvider = createOpenAI({
         apiKey: apiKey || 'dummy-key',
         baseURL: finalBaseUrl,
@@ -103,11 +116,12 @@ CRITICAL RULES:
         let cleanedMove = text.trim().toLowerCase();
         cleanedMove = cleanedMove.replace(/[^a-h1-8qrbn]/g, ''); // Extract only valid UCI characters
 
+        console.log(`[AI Response] Status: 200 OK | Move: ${cleanedMove}`);
         return new Response(JSON.stringify({ bestMove: cleanedMove }), { status: 200 });
 
       } catch (error: any) {
         lastError = error;
-        console.error(`AI SDK Error (attempt ${attempt}/3):`, error?.message);
+        console.error(`[AI SDK Error] (attempt ${attempt}/3):`, error?.message || error);
 
         if (isRateLimitError(error)) {
           const retryAfterMs = parseRetryAfterMs(error.message || '');
@@ -136,9 +150,16 @@ CRITICAL RULES:
 
         // Non-rate-limit error: fail fast
         if (error?.status === 401 || (error?.message || '').toLowerCase().includes('api key') || (error?.message || '').toLowerCase().includes('401')) {
+          console.error(`[AI Authentication Error] 401 Unauthorized for provider ${provider}. API Key is likely invalid or expired.`);
           return new Response(JSON.stringify({ error: 'invalid_api_key', message: error.message }), { status: 401 });
         }
         
+        if (error?.status === 400 || error?.status === 404 || (error?.message || '').toLowerCase().includes('model')) {
+          console.error(`[AI Model Error] ${error?.status} for provider ${provider}. Model unsupported or invalid parameters.`);
+          return new Response(JSON.stringify({ error: 'invalid_model', message: error.message }), { status: 400 });
+        }
+        
+        console.error(`[AI General Error] ${error?.status || 500} for provider ${provider}: ${error?.message}`);
         return new Response(JSON.stringify({ error: 'api_error', message: error.message }), { status: 500 });
       }
     }

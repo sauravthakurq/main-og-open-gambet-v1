@@ -14,6 +14,7 @@ import { useGambitAIStore } from '@/store/useGambitAIStore';
 import { useLearningStore } from '@/store/useLearningStore';
 import { Orb } from '../../../orb';
 import { ProfileDropdown } from '@/components/layout/ProfileDropdown';
+import { useNavigationConfirm } from '@/hooks/useNavigationConfirm';
 
 const NavButton = ({ icon: Icon, label, onClick, disabled = false, isDanger = false }: any) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -103,6 +104,7 @@ export default function Navbar() {
   const [showSettingsMenu, setShowSettingsMenu] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const { appState } = useAppStore();
+  const confirmNavigation = useNavigationConfirm();
 
   const toggleFullscreen = () => {
     if (!document.fullscreenElement) {
@@ -128,7 +130,7 @@ export default function Navbar() {
         Desktop Navbar (sm:up) 
         Fixed to TOP
       */}
-      <header className="hidden sm:flex fixed top-0 left-0 w-full h-[60px] lg:h-[64px] items-center justify-between px-5 sm:px-6 z-40 bg-[#0a0a0a]/95 backdrop-blur-xl border-b border-white/[0.06] shadow-sm pt-[env(safe-area-inset-top)]">
+      <header className="hidden sm:flex fixed top-0 left-0 w-full h-[60px] lg:h-[64px] items-center justify-between px-5 sm:px-6 z-40 bg-transparent pt-[env(safe-area-inset-top)]">
         
         {/* Left: Logo + Brand */}
         <div className="flex items-center gap-3 w-1/3">
@@ -137,7 +139,11 @@ export default function Navbar() {
             alt="Logo" 
             className="w-9 h-9 object-contain cursor-pointer hover:opacity-80 transition-opacity shrink-0" 
             draggable={false} 
-            onClick={() => setIsGameMenuOpen(true)}
+            onClick={() => confirmNavigation(() => {
+              if (window.location.pathname !== '/') {
+                window.location.href = '/';
+              }
+            })}
           />
           <div className="flex flex-col">
             <span className="text-[15px] font-black text-white leading-none tracking-tight">Open Gambit</span>
@@ -158,11 +164,11 @@ export default function Navbar() {
 
         {/* Right: App Controls */}
         <div className="flex items-center justify-end gap-1 w-1/3">
-          <NavButton icon={GraduationCap} label="Learn" onClick={() => {
+          <NavButton icon={GraduationCap} label="Learn" onClick={() => confirmNavigation(() => {
             const store = useLearningStore.getState();
-            store.setWorkspaceOpen(!store.isWorkspaceOpen);
-          }} />
-          <GambitAINavButton onClick={() => setWorkspaceOpen(true)} />
+            store.setWorkspaceOpen(true);
+          })} />
+          <GambitAINavButton onClick={() => confirmNavigation(() => setWorkspaceOpen(true))} />
           <div className="w-px h-5 bg-white/10 mx-2" />
           <NavButton 
             icon={isFullscreen ? Minimize : Maximize} 
@@ -184,47 +190,47 @@ export default function Navbar() {
         Mobile Navbar (xs) 
         Fixed to BOTTOM
       */}
-      <header className="flex sm:hidden fixed bottom-0 left-0 w-full items-center justify-between px-2 pb-[env(safe-area-inset-bottom)] pt-2 z-50 bg-[#0a0a0a]/90 backdrop-blur-xl border-t border-white/[0.08] shadow-[0_-8px_32px_rgba(0,0,0,0.4)]">
-        <div className="flex items-center justify-between w-full max-w-[400px] mx-auto pb-2">
+      <header className="flex sm:hidden fixed bottom-0 left-0 w-full items-center justify-between px-2 pb-[env(safe-area-inset-bottom)] z-50 bg-transparent">
+        <div className="flex items-center justify-between w-full max-w-[400px] mx-auto pt-1 pb-1">
           
           <button 
             onClick={() => setIsGameMenuOpen(true)}
-            className="flex flex-col items-center justify-center w-14 h-12 text-white/50 hover:text-white transition-colors"
+            className="flex flex-col items-center justify-center w-14 h-11 text-white/50 hover:text-white transition-colors"
           >
-            <Home size={22} strokeWidth={2} />
+            <Home size={20} strokeWidth={2} />
             <span className="text-[9px] font-bold mt-1 tracking-wider uppercase">Menu</span>
           </button>
           
           <button 
             onClick={undoMove}
-            className="flex flex-col items-center justify-center w-14 h-12 text-white/50 hover:text-white transition-colors"
+            className="flex flex-col items-center justify-center w-14 h-11 text-white/50 hover:text-white transition-colors"
           >
-            <RotateCcw size={22} strokeWidth={2} />
+            <RotateCcw size={20} strokeWidth={2} />
             <span className="text-[9px] font-bold mt-1 tracking-wider uppercase">Undo</span>
           </button>
           
           <div className="relative -top-6">
             <button
-              onClick={() => setWorkspaceOpen(true)}
-              className="w-16 h-16 rounded-full bg-gradient-to-br from-[var(--color-accent)] to-[#8a7a6a] border-4 border-[#0a0a0a] shadow-[0_4px_24px_var(--color-accent-dim)] flex items-center justify-center transition-transform active:scale-95"
+              onClick={() => confirmNavigation(() => setWorkspaceOpen(true))}
+              className="rounded-full flex items-center justify-center transition-transform active:scale-95 bg-transparent border-none outline-none"
             >
-              <Orb theme="cloud" size={40} state={useGambitAIStore.getState().orbState === 'idle' ? 'thinking' : useGambitAIStore.getState().orbState} />
+              <Orb theme="cloud" size={54} state={useGambitAIStore.getState().orbState === 'idle' ? 'thinking' : useGambitAIStore.getState().orbState} />
             </button>
           </div>
 
           <button 
             onClick={flipBoard}
-            className="flex flex-col items-center justify-center w-14 h-12 text-white/50 hover:text-white transition-colors"
+            className="flex flex-col items-center justify-center w-14 h-11 text-white/50 hover:text-white transition-colors"
           >
-            <RefreshCcw size={22} strokeWidth={2} />
+            <RefreshCcw size={20} strokeWidth={2} />
             <span className="text-[9px] font-bold mt-1 tracking-wider uppercase">Flip</span>
           </button>
           
           <button 
             onClick={() => setShowSettingsMenu(true)}
-            className="flex flex-col items-center justify-center w-14 h-12 text-white/50 hover:text-white transition-colors"
+            className="flex flex-col items-center justify-center w-14 h-11 text-white/50 hover:text-white transition-colors"
           >
-            <Settings size={22} strokeWidth={2} />
+            <Settings size={20} strokeWidth={2} />
             <span className="text-[9px] font-bold mt-1 tracking-wider uppercase">Settings</span>
           </button>
 

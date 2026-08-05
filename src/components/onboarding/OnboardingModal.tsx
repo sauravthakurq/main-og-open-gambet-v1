@@ -45,7 +45,7 @@ export default function OnboardingModal() {
   };
 
   return (
-    <div className="fixed inset-0 z-[100] flex flex-col sm:flex-row items-center justify-start sm:justify-center overflow-y-auto sm:overflow-hidden overflow-x-hidden bg-black selection:bg-white/20 pt-[calc(80px+env(safe-area-inset-top))] pb-[calc(3rem+env(safe-area-inset-bottom))] sm:p-0">
+    <div className="fixed inset-0 z-[100] flex flex-col items-center overflow-y-auto overflow-x-hidden bg-black selection:bg-white/20 pt-[calc(80px+env(safe-area-inset-top))] pb-[calc(3rem+env(safe-area-inset-bottom))] sm:p-0 custom-scrollbar">
       
       {/* Home Navbar overlaying the modal (only on first step) */}
       {step === 'opponent' && <HomeNavbar />}
@@ -121,7 +121,7 @@ export default function OnboardingModal() {
         animate={{ scale: 1, opacity: 1, filter: 'blur(0px)' }}
         exit={{ scale: 0.95, opacity: 0, filter: 'blur(5px)' }}
         transition={{ type: "spring", damping: 25, stiffness: 200, mass: 0.8 }}
-        className="relative z-10 w-full max-w-[1000px] flex flex-col items-center justify-center px-4 py-8 pt-24"
+        className="relative z-10 w-full max-w-[1200px] flex flex-col items-center m-auto px-4 py-4 sm:py-8"
       >
         <AnimatePresence mode="wait" initial={false}>
           {step === 'opponent' && (

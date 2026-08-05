@@ -3,7 +3,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { ArrowLeft, Maximize, RefreshCw, Share2 } from 'lucide-react';
 import { SpectatorBoard } from '@/components/watch-live/SpectatorBoard';
-import { PlayerCardSpectator } from '@/components/watch-live/PlayerCardSpectator';
+import PlayerCard from '@/components/game/PlayerCard';
 import { LiveBadge } from '@/components/watch-live/LiveBadge';
 import { fetchLichess } from '@/services/lichess/lichessClient';
 import { SkeletonChessBoard, SkeletonText } from '@/components/ui/Skeleton';
@@ -65,12 +65,13 @@ export default function WatchGamePage() {
           ) : (
             <div className="w-full max-w-[800px] flex flex-col gap-2">
               {/* Opponent (Top) */}
-              <PlayerCardSpectator 
+              <PlayerCard 
+                type="human"
                 color="b"
-                name={gameData?.players?.black?.user?.name}
-                title={gameData?.players?.black?.user?.title}
-                rating={gameData?.players?.black?.rating}
+                playerNameOverride={gameData?.players?.black?.user?.name || 'Anonymous'}
+                ratingOverride={gameData?.players?.black?.rating}
                 isActive={false} // Would need stream data to know active turn
+                timeRemainingOverride={0} // Fallback since lichess doesn't export clock
               />
 
               <SpectatorBoard 
@@ -79,12 +80,13 @@ export default function WatchGamePage() {
               />
 
               {/* Player (Bottom) */}
-              <PlayerCardSpectator 
+              <PlayerCard 
+                type="human"
                 color="w"
-                name={gameData?.players?.white?.user?.name}
-                title={gameData?.players?.white?.user?.title}
-                rating={gameData?.players?.white?.rating}
+                playerNameOverride={gameData?.players?.white?.user?.name || 'Anonymous'}
+                ratingOverride={gameData?.players?.white?.rating}
                 isActive={true}
+                timeRemainingOverride={0} // Fallback since lichess doesn't export clock
               />
             </div>
           )}

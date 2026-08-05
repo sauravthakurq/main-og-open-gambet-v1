@@ -86,8 +86,10 @@ export default function BoardAndPiecesSettings() {
       filtered = items.filter(item => item.toLowerCase().includes(searchQuery.toLowerCase().replace(/ /g, '_')));
     }
     
-    // Sort: Favorites first, then alphabetical
-    return filtered.sort((a, b) => {
+    // Sort: Default first, then Favorites, then alphabetical
+    return [...filtered].sort((a, b) => {
+      if (a === 'default') return -1;
+      if (b === 'default') return 1;
       const aFav = favorites.includes(a);
       const bFav = favorites.includes(b);
       if (aFav && !bFav) return -1;

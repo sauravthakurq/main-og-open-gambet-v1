@@ -9,7 +9,9 @@ import { Trophy, RefreshCcw, LogOut, Download, Activity, X, Skull, Handshake, Ti
 import { audioManager } from '@/lib/audioManager';
 import { useAndroidBack } from '@/hooks/useAndroidBack';
 import { useEngineStore } from '@/store/useEngineStore';
-import { useToastStore } from '@/store/useToastStore';
+import { AIAnalysisModal } from '@/components/ui/AIAnalysisModal';
+import { useAnalysisStore } from '@/store/useAnalysisStore';
+import { useAISettingsStore } from '@/store/useAISettingsStore';
 
 const ChessKnightIcon = ({ className }: { className?: string }) => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className={className}>
@@ -53,6 +55,57 @@ const CustomStyles = () => (
     .animate-glint {
       animation: glint 1.5s ease-in-out infinite;
     }
+    .elite-timeout-shadow {
+      box-shadow: 
+        0 0 0 1px rgba(255, 255, 255, 0.04),
+        0 24px 48px rgba(0, 0, 0, 0.8),
+        0 0 80px -20px rgba(220, 38, 38, 0.15);
+    }
+    @keyframes elite-enter {
+      0% { opacity: 0; transform: scale(0.96) translateY(12px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    @keyframes elite-exit {
+      0% { opacity: 1; transform: scale(1) translateY(0); }
+      100% { opacity: 0; transform: scale(0.96) translateY(12px); }
+    }
+    @keyframes backdrop-in {
+      0% { opacity: 0; backdrop-filter: blur(0px); }
+      100% { opacity: 1; backdrop-filter: blur(32px); }
+    }
+    @keyframes stagger-up {
+      0% { opacity: 0; transform: translateY(10px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes timer-drain {
+      0% { stroke-dashoffset: 0; stroke: #ef4444; }
+      80% { stroke-dashoffset: 276; stroke: #ef4444; filter: drop-shadow(0 0 6px rgba(239,68,68,0.8)); }
+      100% { stroke-dashoffset: 276; stroke: #7f1d1d; filter: drop-shadow(0 0 0px rgba(0,0,0,0)); }
+    }
+    .modal-enter { animation: elite-enter 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    .modal-exit { animation: elite-exit 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    .backdrop-enter { animation: backdrop-in 0.6s ease-out forwards; }
+    
+    .timer-ring-deplete { 
+      animation: timer-drain 1.5s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+      animation-delay: 0.2s;
+    }
+    .stagger-1 { opacity: 0; animation: stagger-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; animation-delay: 0.1s; }
+    .stagger-2 { opacity: 0; animation: stagger-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; animation-delay: 0.2s; }
+    .stagger-3 { opacity: 0; animation: stagger-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; animation-delay: 0.3s; }
+    .stagger-4 { opacity: 0; animation: stagger-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; animation-delay: 0.4s; }
+    .text-shimmer-red {
+      background: linear-gradient(to bottom, #ffffff, #fca5a5 30%, #ef4444 80%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .critical-pulse {
+      animation: pulse-red 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+    @keyframes pulse-red {
+      0%, 100% { opacity: 0.15; transform: scale(1); }
+      50% { opacity: 0.3; transform: scale(1.05); }
+    }
   `}} />
 );
 
@@ -61,9 +114,16 @@ export default function GameOverModal() {
   const { setAppState, matchConfig } = useAppStore();
   const { whiteTime, blackTime, stopClock } = useChessClockStore();
   const [isVisible, setIsVisible] = useState(false);
+  const [showAnalysis, setShowAnalysis] = useState(false);
+  const { fetchAnalysis } = useAnalysisStore();
+  const { provider, model, apiKeys, baseUrls, organizations } = useAISettingsStore();
   useAndroidBack('game-over-modal', () => {
+    if (showAnalysis) {
+      setShowAnalysis(false);
+      return;
+    }
     if (isVisible) setIsVisible(false);
-  }, isVisible);
+  }, isVisible || showAnalysis);
   const [isShining, setIsShining] = useState(false);
 
   useEffect(() => {
@@ -71,6 +131,25 @@ export default function GameOverModal() {
       setIsVisible(true);
       stopClock();
       
+      // Prefetch AI analysis silently in the background
+      const currentPgn = history.map(m => m.san).join(' ');
+      if (currentPgn) {
+        const apiKey = apiKeys[provider]?.[0]?.key || '';
+        const baseUrl = baseUrls[provider] || '';
+        const organization = organizations[provider] || '';
+        
+        fetchAnalysis({
+          pgn: currentPgn,
+          provider,
+          model,
+          apiKey,
+          baseUrl,
+          organization
+        }).catch(err => {
+          console.error("Background prefetch analysis failed:", err);
+        });
+      }
+
       const userColor = matchConfig?.color || 'w';
       const isAIVsAI = matchConfig?.opponentType === 'aivsai';
       
@@ -173,6 +252,9 @@ export default function GameOverModal() {
     ? 'GPT-5' 
     : matchConfig?.opponentType === 'online' ? 'Opponent' : 'Guest User';
 
+  const aiWhiteName = matchConfig?.aiVsAiConfig?.white.provider || 'WHITE';
+  const aiBlackName = matchConfig?.aiVsAiConfig?.black.provider || 'BLACK';
+
   if (isDraw) {
     if (gameResult.reason === 'timeout_insufficient') {
       title = 'DRAW'; // Actually user wants "🤝 Draw" but the icon is separate usually. Wait, user specifically said title: "🤝 Draw". Let's handle emoji below or just add it.
@@ -186,8 +268,8 @@ export default function GameOverModal() {
     }
   } else if (didUserWin) {
     if (isAIVsAI) {
-      title = `${winner === 'w' ? 'WHITE' : 'BLACK'} WINS!`;
-      if (gameResult.reason === 'timeout') reason = `${winner === 'w' ? 'Black' : 'White'} ran out of time.`;
+      title = `${winner === 'w' ? aiWhiteName.toUpperCase() : aiBlackName.toUpperCase()} WINS!`;
+      if (gameResult.reason === 'timeout') reason = `${winner === 'w' ? aiBlackName : aiWhiteName} ran out of time.`;
       else if (game.isCheckmate() || gameResult.reason === 'checkmate') reason = 'by Checkmate';
     } else {
       title = 'YOU WIN!';
@@ -229,22 +311,29 @@ export default function GameOverModal() {
   };
 
   const handleRestart = () => {
-    useEngineStore.getState().cancelAIRequest();
-    setIsVisible(false);
+    // 1. Cancel/reset the engine state FIRST — this aborts any in-flight request
+    //    and bumps retryCount so the AI loop re-fires on the new game.
+    useEngineStore.getState().resetEngineState();
+    
+    // 2. Reset the chess board (generates a new gameId — AI loop detects this)
     resetGame();
+    
+    // 3. Reset and start the clock
     if (matchConfig.timeControl) {
       useChessClockStore.getState().resetClock(matchConfig.timeControl.minutes * 60 * 1000);
     } else {
       useChessClockStore.getState().resetClock(10 * 60 * 1000);
     }
     useChessClockStore.getState().startClock('w');
-    useToastStore.getState().addToast({
-      type: 'success',
-      title: 'Game Restarted',
-      message: 'The board has been reset.',
-      duration: 2000,
-    });
+    
+    // 4. Hide the modal
+    setIsVisible(false);
+
+    // 5. CRITICAL: Set appState back to 'playing' so useAIGameLoop guard passes.
+    //    Must happen AFTER resetGame() so the new gameId is already in the store.
+    useAppStore.getState().restartGame();
   };
+
 
   const handleNewGame = () => {
     useEngineStore.getState().cancelAIRequest();
@@ -266,11 +355,12 @@ export default function GameOverModal() {
 
   if (didUserWin && !isDraw) {
     return (
-      <div className="fixed inset-0 z-[100] flex items-end md:items-center justify-center md:p-4 font-sans overflow-hidden selection:bg-[#e1aa53] selection:text-black">
-        <CustomStyles />
+      <>
+        <div className="fixed inset-0 z-[100] flex items-end md:items-center justify-center md:p-4 font-sans overflow-hidden selection:bg-[#e1aa53] selection:text-black">
+          <CustomStyles />
         
         {/* Background glow to ground the popup */}
-        <div className="absolute inset-0 bg-black/60 backdrop-blur-sm pointer-events-none z-0" onClick={() => setIsVisible(false)} />
+        <div className="absolute inset-0 bg-black/60 backdrop-blur-sm z-0" />
         <div className="absolute w-[600px] h-[600px] bg-[#e1aa53] rounded-full blur-[150px] opacity-[0.05] pointer-events-none z-0" />
 
         {/* Main Card Container */}
@@ -336,7 +426,7 @@ export default function GameOverModal() {
             <h1 className="text-[3.25rem] font-extrabold tracking-tight mb-2 flex items-center justify-center gap-3 leading-none whitespace-nowrap">
               {isAIVsAI ? (
                 <span className="bg-gradient-to-b from-[#fff5d6] via-[#e5b65c] to-[#b37d26] text-transparent bg-clip-text drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] uppercase">
-                  {winner === 'w' ? 'WHITE' : 'BLACK'} WINS!
+                  {winner === 'w' ? aiWhiteName.toUpperCase() : aiBlackName.toUpperCase()} WINS!
                 </span>
               ) : (
                 <>
@@ -430,7 +520,7 @@ export default function GameOverModal() {
 
           {/* Bottom Actions */}
           <div className="w-full flex items-center justify-between text-gray-400 text-[11px] font-bold tracking-wide uppercase z-10 px-2 pb-1">
-            <button onClick={() => console.log('AI Analysis')} className="flex items-center gap-2 hover:text-[#e1aa53] transition-colors group">
+            <button onClick={() => setShowAnalysis(true)} className="flex items-center gap-2 hover:text-[#e1aa53] transition-colors group">
               <Activity size={15} className="group-hover:scale-110 transition-transform" />
               AI Analysis
             </button>
@@ -449,7 +539,118 @@ export default function GameOverModal() {
           </div>
 
         </motion.div>
-      </div>
+        </div>
+        {showAnalysis && (
+          <AIAnalysisModal pgn={history.map(m => m.san).join(' ')} onClose={() => setShowAnalysis(false)} />
+        )}
+      </>
+    );
+  }
+
+  // Cinematic Time's Up Popup
+  if (gameResult.reason === 'timeout' && !didUserWin && !isDraw) {
+    const userIsWhite = userColor === 'w';
+    const highlightWhiteTime = !userIsWhite;
+    
+    return (
+      <>
+        <div className="fixed inset-0 z-[100] flex items-center justify-center overflow-hidden selection:bg-red-500/30">
+          <CustomStyles />
+
+        {/* Background ambient lighting */}
+        <div className="absolute inset-0 z-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-red-950/20 via-[#050505] to-[#010101] opacity-90"></div>
+        
+        <div className="absolute inset-0 bg-black/60 backdrop-enter"></div>
+        <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_center,rgba(220,38,38,0.05)_0%,transparent_100%)] z-0"></div>
+
+        <div className="relative z-10 w-[90%] max-w-[380px] rounded-[28px] bg-[#0c0909]/80 backdrop-blur-[40px] border border-white/[0.06] p-5 md:p-6 flex flex-col items-center elite-timeout-shadow overflow-hidden modal-enter">
+            {/* Precision top refractive light line */}
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[80%] h-[1px] bg-gradient-to-r from-transparent via-red-400/30 to-transparent"></div>
+            
+            <button onClick={() => setIsVisible(false)} className="absolute top-4 right-4 p-1.5 rounded-full bg-white/[0.03] hover:bg-white/[0.1] text-white/30 hover:text-white transition-colors z-20 focus:outline-none">
+              <X size={16} strokeWidth={2.5} />
+            </button>
+
+            <div className="relative z-10 flex flex-col items-center text-center w-full mt-1">
+              <div className="stagger-1 relative flex items-center justify-center w-[140px] h-[140px] md:w-[160px] md:h-[160px] mb-4 mt-2">
+                <div className="absolute inset-0 bg-red-600/20 rounded-full blur-[35px] critical-pulse"></div>
+                <svg className="absolute w-[105%] h-[105%] animate-[spin_25s_linear_infinite]" viewBox="0 0 100 100">
+                  <circle cx="50" cy="50" r="48" fill="none" stroke="rgba(185, 28, 28, 0.7)" strokeWidth="3" strokeDasharray="2 12" />
+                </svg>
+                <svg className="absolute w-[88%] h-[88%] animate-[spin_15s_linear_infinite_reverse]" viewBox="0 0 100 100">
+                  <circle cx="50" cy="50" r="46" fill="none" stroke="rgba(255, 255, 255, 0.05)" strokeWidth="1.5" strokeDasharray="15 10" />
+                </svg>
+                <svg className="absolute w-[95%] h-[95%] transform -rotate-90 drop-shadow-[0_0_12px_rgba(239,68,68,0.5)]" viewBox="0 0 100 100">
+                  <circle cx="50" cy="50" r="44" fill="none" stroke="rgba(255, 255, 255, 0.03)" strokeWidth="2.5" />
+                  <circle cx="50" cy="50" r="44" fill="none" stroke="#ef4444" strokeWidth="2.5" strokeDasharray="276" strokeDashoffset="276" className="timer-ring-deplete" strokeLinecap="round" />
+                </svg>
+                <div className="absolute w-[95px] h-[95px] md:w-[110px] md:h-[110px] bg-gradient-to-b from-[#1a0505] to-[#0a0202] rounded-full border border-red-500/20 shadow-[inset_0_2px_12px_rgba(239,68,68,0.3)] flex items-center justify-center overflow-hidden">
+                  <div className="absolute inset-0 bg-red-500/10 animate-pulse mix-blend-screen" style={{ animationDuration: '1.5s' }}></div>
+                  <Timer size={48} strokeWidth={1.5} className="text-red-400 relative z-10 drop-shadow-[0_0_12px_rgba(239,68,68,0.8)] md:w-[60px] md:h-[60px]" />
+                </div>
+              </div>
+
+              <h2 className="stagger-2 text-[28px] md:text-[32px] font-black tracking-tighter mb-1 drop-shadow-[0_2px_12px_rgba(239,68,68,0.4)] text-shimmer-red">
+                TIME'S UP
+              </h2>
+              <p className="stagger-2 text-white/40 font-bold tracking-[0.2em] uppercase text-[9px] md:text-[10px] mb-6">
+                Match concluded • Time depletion
+              </p>
+
+              <div className="stagger-3 w-full grid grid-cols-2 gap-2.5 mb-6">
+                <div className="flex flex-col bg-white/[0.02] rounded-[18px] p-3.5 border border-white/[0.04] shadow-[inset_0_1px_1px_rgba(255,255,255,0.02)] items-center justify-center backdrop-blur-md relative group hover:bg-white/[0.04] transition-colors">
+                  <span className="text-white/30 text-[9px] uppercase tracking-widest font-bold mb-1 group-hover:text-white/50 transition-colors">Final Move</span>
+                  <span className="text-white/90 font-mono text-lg font-bold tracking-tight">{lastMove}</span>
+                </div>
+                <div className="flex flex-col bg-white/[0.02] rounded-[18px] p-3.5 border border-white/[0.04] shadow-[inset_0_1px_1px_rgba(255,255,255,0.02)] items-center justify-center backdrop-blur-md relative group hover:bg-white/[0.04] transition-colors">
+                  <span className="text-white/30 text-[9px] uppercase tracking-widest font-bold mb-1 group-hover:text-white/50 transition-colors">Total Moves</span>
+                  <span className="text-white/90 font-mono text-lg font-bold tracking-tight">{totalMoves}</span>
+                </div>
+                
+                {/* White Time */}
+                <div className={`flex flex-col rounded-[18px] p-3.5 border items-center justify-center backdrop-blur-md relative overflow-hidden transition-colors ${highlightWhiteTime ? 'bg-red-950/30 border-red-500/20 shadow-[inset_0_1px_12px_rgba(239,68,68,0.1)]' : 'bg-white/[0.02] border-white/[0.04] shadow-[inset_0_1px_1px_rgba(255,255,255,0.02)]'}`}>
+                  {highlightWhiteTime && <div className="absolute inset-0 bg-red-500/10 critical-pulse"></div>}
+                  <span className={`text-[9px] uppercase tracking-widest font-bold mb-1 relative z-10 ${highlightWhiteTime ? 'text-red-300/70' : 'text-white/30'}`}>White Time</span>
+                  <span className={`font-mono text-lg font-bold tracking-tight relative z-10 ${highlightWhiteTime ? 'text-red-400 drop-shadow-[0_0_8px_rgba(239,68,68,0.5)]' : 'text-white/90'}`}>{formatTimeStr(whiteTime)}</span>
+                </div>
+                
+                {/* Black Time */}
+                <div className={`flex flex-col rounded-[18px] p-3.5 border items-center justify-center backdrop-blur-md relative overflow-hidden transition-colors ${!highlightWhiteTime ? 'bg-red-950/30 border-red-500/20 shadow-[inset_0_1px_12px_rgba(239,68,68,0.1)]' : 'bg-white/[0.02] border-white/[0.04] shadow-[inset_0_1px_1px_rgba(255,255,255,0.02)]'}`}>
+                  {!highlightWhiteTime && <div className="absolute inset-0 bg-red-500/10 critical-pulse"></div>}
+                  <span className={`text-[9px] uppercase tracking-widest font-bold mb-1 relative z-10 ${!highlightWhiteTime ? 'text-red-300/70' : 'text-white/30'}`}>Black Time</span>
+                  <span className={`font-mono text-lg font-bold tracking-tight relative z-10 ${!highlightWhiteTime ? 'text-red-400 drop-shadow-[0_0_8px_rgba(239,68,68,0.5)]' : 'text-white/90'}`}>{formatTimeStr(blackTime)}</span>
+                </div>
+              </div>
+
+              <div className="stagger-4 w-full flex flex-col gap-2.5">
+                <div className="flex gap-2.5">
+                  <button onClick={handleRestart} className="group relative flex-1 flex items-center justify-center gap-2 py-3.5 rounded-[16px] bg-white/[0.04] text-white font-semibold transition-all hover:bg-white/[0.08] hover:scale-[1.02] border border-white/[0.08] active:scale-[0.98] overflow-hidden focus:outline-none">
+                    <RefreshCcw size={16} className="text-white/50 group-hover:text-white group-hover:rotate-180 transition-all duration-500" />
+                    <span className="text-[13px] tracking-wide">Rematch</span>
+                  </button>
+                  <button onClick={handleNewGame} className="group relative flex-1 flex items-center justify-center gap-2 py-3.5 rounded-[16px] bg-gradient-to-b from-[#E5C5A8] to-[#c29b7a] text-black font-bold transition-all hover:brightness-110 hover:scale-[1.02] shadow-[0_4px_20px_rgba(229,197,168,0.15)] hover:shadow-[0_8px_32px_rgba(229,197,168,0.25)] border border-[#E5C5A8]/50 active:scale-[0.98] focus:outline-none">
+                    <Home size={16} className="text-black/80 group-hover:text-black transition-colors" />
+                    <span className="text-[13px] tracking-wide">Home</span>
+                  </button>
+                </div>
+                <div className="flex gap-2.5">
+                  <button onClick={() => setShowAnalysis(true)} className="flex-1 flex items-center justify-center gap-2 py-3 rounded-[14px] bg-transparent text-white/40 hover:text-white hover:bg-white/[0.03] transition-all font-medium text-[12px] group focus:outline-none active:scale-[0.98]">
+                    <Activity size={14} className="group-hover:text-[#E5C5A8] transition-colors" />
+                    AI Analysis
+                  </button>
+                  <button onClick={() => setIsVisible(false)} className="flex-1 flex items-center justify-center gap-2 py-3 rounded-[14px] bg-transparent text-white/40 hover:text-white hover:bg-white/[0.03] transition-all font-medium text-[12px] group focus:outline-none active:scale-[0.98]">
+                    <Eye size={14} className="group-hover:text-[#E5C5A8] transition-colors" />
+                    Review Game
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {showAnalysis && (
+          <AIAnalysisModal pgn={history.map(m => m.san).join(' ')} onClose={() => setShowAnalysis(false)} />
+        )}
+      </>
     );
   }
 
@@ -489,7 +690,6 @@ export default function GameOverModal() {
         exit={{ opacity: 0, backdropFilter: 'blur(0px)' }}
         transition={{ duration: 0.15 }}
         className="absolute inset-0 bg-black/60"
-        onClick={() => setIsVisible(false)}
       />
 
       {/* Vignette */}
@@ -592,7 +792,7 @@ export default function GameOverModal() {
             </div>
             
             <div className="flex gap-3 mt-1">
-              <button onClick={() => console.log('AI Analysis')} className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-transparent text-white/50 hover:text-white hover:bg-white/5 transition-all font-semibold text-sm border border-transparent hover:border-white/10 group">
+              <button onClick={() => setShowAnalysis(true)} className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-transparent text-white/50 hover:text-white hover:bg-white/5 transition-all font-semibold text-sm border border-transparent hover:border-white/10 group">
                 <Activity size={16} className="group-hover:scale-110 transition-transform" />
                 AI Analysis
               </button>

@@ -23,13 +23,10 @@ export const ThemeCard = ({
 }: ThemeCardProps) => {
   return (
     <motion.div
-      layout
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.9 }}
-      whileHover={{ scale: 1.02 }}
-      whileTap={{ scale: 0.98 }}
-      className={`relative group cursor-pointer rounded-3xl overflow-hidden border-2 transition-all duration-150 ${
+      className={`relative group cursor-pointer rounded-3xl overflow-hidden border-2 transition-all duration-150 hover:scale-[1.02] active:scale-[0.98] ${
         isSelected
           ? 'border-[var(--color-accent)] shadow-[0_0_30px_rgba(227,193,149,0.2)]'
           : 'border-white/5 hover:border-white/20 hover:shadow-xl bg-[#1c1c1e]'
@@ -71,6 +68,7 @@ export const ThemeCard = ({
               alt={name}
               className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-110"
               loading="lazy"
+              decoding="async"
             />
           )
         ) : (
@@ -87,6 +85,7 @@ export const ThemeCard = ({
                   alt={p}
                   className="w-full h-full max-w-[80%] max-h-[80%] object-contain drop-shadow-xl transition-transform duration-150 group-hover:scale-110"
                   loading="lazy"
+                  decoding="async"
                 />
               </div>
             ))}

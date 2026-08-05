@@ -42,6 +42,10 @@ interface AppState {
   setPlaybackSpeed: (speed: number) => void;
   setIsGameMenuOpen: (isOpen: boolean) => void;
   setIsSoundEnabled: (isEnabled: boolean) => void;
+  /** Atomically resets all in-game UI state and transitions back to 'playing'. 
+   *  Call this for Rematch/Restart so appState is guaranteed to be 'playing'
+   *  before the game loop re-fires. */
+  restartGame: () => void;
 }
 
 const defaultMatchConfig: MatchConfig = {
@@ -76,6 +80,12 @@ export const useAppStore = create<AppState>()(
       setPlaybackSpeed: (speed) => set({ playbackSpeed: speed }),
       setIsGameMenuOpen: (isOpen) => set({ isGameMenuOpen: isOpen }),
       setIsSoundEnabled: (isEnabled) => set({ isSoundEnabled: isEnabled }),
+
+      restartGame: () => set({
+        appState: 'playing',
+        isPaused: false,
+        isGameMenuOpen: false,
+      }),
     }),
     {
       name: 'gambit-app-storage',
