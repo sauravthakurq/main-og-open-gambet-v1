@@ -39,7 +39,6 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans);
   min-height: 100vh;
-  overflow: hidden;
   /* Prevent overscroll bounce on mobile */
   overscroll-behavior-y: none;
   /* Support iPhone notch and Android system bars */
