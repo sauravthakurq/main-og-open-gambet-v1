@@ -1,9 +1,45 @@
-# ♟️ Open Gambit 
+<p align="center">
+  <img src="./public/app%20logo.png" width="150" alt="Open Gambit Logo"/>
+</p>
+
+<h1 align="center">♟️ Open Gambit</h1>
 
 <p align="center">
-  <em>Human Strategy. Machine Intelligence. One Board.</em><br/>
-  <strong><a href="https://og-gambet.vercel.app">View Live Dashboard</a></strong>
+  <em>Human Strategy. Machine Intelligence. One Board.</em>
 </p>
+
+<p align="center">
+  <strong>Main Dashboard:</strong> <a href="https://og-gambet.vercel.app">og-gambet.vercel.app</a> | <strong>Repo:</strong> <a href="https://github.com/sauravthakurq/main-og-open-gambet-v1">Dashboard Code</a><br/>
+  <strong>Landing Page:</strong> <a href="https://ogopengambit.vercel.app">ogopengambit.vercel.app</a> | <strong>Repo:</strong> <a href="https://github.com/sauravthakurq/OG">Landing Page Code</a>
+</p>
+
+---
+
+## 🖼️ Application Previews
+
+<p align="center">
+  <img src="./public/1.png" width="900" alt="Open Gambit Interface 1"/>
+</p>
+
+<br/><br/>
+
+<p align="center">
+  <img src="./public/2.png" width="900" alt="Open Gambit Interface 2"/>
+</p>
+
+<br/><br/>
+
+<p align="center">
+  <img src="./public/3.png" width="900" alt="Open Gambit Interface 3"/>
+</p>
+
+<br/><br/>
+
+<p align="center">
+  <img src="./public/4.png" width="900" alt="Open Gambit Interface 4"/>
+</p>
+
+<br/><br/>
 
 ---
 
