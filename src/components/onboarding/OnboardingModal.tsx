@@ -45,7 +45,7 @@ export default function OnboardingModal() {
   };
 
   return (
-    <div className="fixed inset-0 z-[100] flex flex-col items-center overflow-y-auto overflow-x-hidden bg-black selection:bg-white/20 pt-[calc(80px+env(safe-area-inset-top))] pb-[calc(3rem+env(safe-area-inset-bottom))] sm:p-0 custom-scrollbar">
+    <div className="fixed inset-0 z-[100] flex flex-col items-center overflow-hidden bg-black selection:bg-white/20 pt-[calc(80px+env(safe-area-inset-top))] pb-[calc(3rem+env(safe-area-inset-bottom))] sm:p-0 custom-scrollbar">
       
       {/* Home Navbar overlaying the modal (only on first step) */}
       {step === 'opponent' && <HomeNavbar />}

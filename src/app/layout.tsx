@@ -45,14 +45,14 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} h-full overflow-hidden antialiased`}
     >
       <head>
-        <link rel="apple-touch-icon" href="/icon-192.png" />
+        <link rel="apple-touch-icon" href="/icon-192.png?v=2" />
         <link rel="preload" href="/battle.png" as="image" />
         <link rel="preload" href="/think-like-ai.png" as="image" />
       </head>
-      <body className="min-h-full flex flex-col">
+      <body className="min-h-full h-full overflow-hidden flex flex-col">
         <ThemeInjector />
         <ServiceWorkerRegister />
         <OfflineBanner />
