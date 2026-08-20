@@ -8,7 +8,7 @@ export const AccountSettingsTab = () => {
   const { account, updateAccount } = useSettingsStore();
 
   return (
-    <div className="w-full max-w-3xl mx-auto py-8 px-4 animate-in fade-in slide-in-from-bottom-4 duration-150">
+    <div className="w-full max-w-3xl mx-auto py-8 pb-32 px-4 animate-in fade-in slide-in-from-bottom-4 duration-150">
       <SettingSection title="Public Profile" icon={User} description="Manage your public-facing details.">
         <SettingRow title="Username" description="Your unique display name">
           <SettingInput value={account.username} onChange={(v: string) => updateAccount({ username: v })} placeholder="Username" />
@@ -36,7 +36,7 @@ export const GameplaySettingsTab = () => {
   const { gameplay, updateGameplay } = useSettingsStore();
 
   return (
-    <div className="w-full max-w-3xl mx-auto py-8 px-4 animate-in fade-in slide-in-from-bottom-4 duration-150">
+    <div className="w-full max-w-3xl mx-auto py-8 pb-32 px-4 animate-in fade-in slide-in-from-bottom-4 duration-150">
       <SettingSection title="Match Experience" icon={Swords} description="Configure how pieces move and board behaves.">
         <SettingRow title="Move Confirmation" description="Require an extra click to confirm moves">
           <SettingToggle checked={gameplay.moveConfirmation} onChange={(v) => updateGameplay({ moveConfirmation: v })} />
@@ -59,7 +59,7 @@ export const ClockSettingsTab = () => {
   const { clock, updateClock } = useSettingsStore();
 
   return (
-    <div className="w-full max-w-3xl mx-auto py-8 px-4 animate-in fade-in slide-in-from-bottom-4 duration-150">
+    <div className="w-full max-w-3xl mx-auto py-8 pb-32 px-4 animate-in fade-in slide-in-from-bottom-4 duration-150">
       <SettingSection title="Time Management" icon={Clock} description="Visual and audio cues for the clock.">
         <SettingRow title="Low-Time Warning" description="Flashes board and pulses clock below 30s">
           <SettingToggle checked={clock.lowTimeWarning} onChange={(v) => updateClock({ lowTimeWarning: v })} />
@@ -83,7 +83,7 @@ export const AISettingsTab = () => {
   const { ai, updateAI } = useSettingsStore();
 
   return (
-    <div className="w-full max-w-3xl mx-auto py-8 px-4 animate-in fade-in slide-in-from-bottom-4 duration-150">
+    <div className="w-full max-w-3xl mx-auto py-8 pb-32 px-4 animate-in fade-in slide-in-from-bottom-4 duration-150">
       <SettingSection title="Artificial Intelligence" icon={Bot} description="Configure AI engines and analysis tools.">
         <SettingRow title="Default AI Model" description="The primary engine used for bot matches">
           <SettingSelect 
@@ -113,7 +113,7 @@ export const LanguageSettingsTab = () => {
   const { language, updateLanguage } = useSettingsStore();
 
   return (
-    <div className="w-full max-w-3xl mx-auto py-8 px-4 animate-in fade-in slide-in-from-bottom-4 duration-150">
+    <div className="w-full max-w-3xl mx-auto py-8 pb-32 px-4 animate-in fade-in slide-in-from-bottom-4 duration-150">
       <SettingSection title="Localization" icon={Globe} description="Format dates, times, and app language.">
         <SettingRow title="App Language" description="The language of the user interface">
           <SettingSelect 
@@ -148,7 +148,7 @@ export const PrivacySettingsTab = () => {
   const { privacy, updatePrivacy } = useSettingsStore();
 
   return (
-    <div className="w-full max-w-3xl mx-auto py-8 px-4 animate-in fade-in slide-in-from-bottom-4 duration-150">
+    <div className="w-full max-w-3xl mx-auto py-8 pb-32 px-4 animate-in fade-in slide-in-from-bottom-4 duration-150">
       <SettingSection title="Privacy & Visibility" icon={Shield} description="Control who can see your activity.">
         <SettingRow title="Online Status" description="Show when you are active on the platform">
           <SettingToggle checked={privacy.onlineStatus} onChange={(v) => updatePrivacy({ onlineStatus: v })} />
@@ -173,7 +173,7 @@ export const PrivacySettingsTab = () => {
 
 export const StorageSettingsTab = () => {
   return (
-    <div className="w-full max-w-3xl mx-auto py-8 px-4 animate-in fade-in slide-in-from-bottom-4 duration-150">
+    <div className="w-full max-w-3xl mx-auto py-8 pb-32 px-4 animate-in fade-in slide-in-from-bottom-4 duration-150">
       <SettingSection title="Local Storage" icon={Database} description="Manage cached assets and data.">
         <SettingRow title="Calculated Cache Size" description="Includes downloaded boards, pieces, and engines">
           <span className="text-[var(--color-accent)] font-mono font-bold">142 MB</span>
@@ -200,7 +200,7 @@ export const AboutSettingsTab = () => {
   };
 
   return (
-    <div className="w-full max-w-3xl mx-auto py-8 px-4 animate-in fade-in slide-in-from-bottom-4 duration-150">
+    <div className="w-full max-w-3xl mx-auto py-8 pb-32 px-4 animate-in fade-in slide-in-from-bottom-4 duration-150">
       
       <SettingSection title="About" icon={Info}>
         <SettingAction label="About Open Gambit" icon={Info} onClick={() => handleNav('/about')} />
@@ -236,7 +236,7 @@ export const ApiSettingsTab = () => {
   const { api, updateApi } = useSettingsStore();
 
   return (
-    <div className="w-full max-w-3xl mx-auto py-8 px-4 animate-in fade-in slide-in-from-bottom-4 duration-150">
+    <div className="w-full max-w-3xl mx-auto py-8 pb-32 px-4 animate-in fade-in slide-in-from-bottom-4 duration-150">
       <SettingSection title="API Configuration" icon={Key} description="Manage your API keys for AI opponents and Gambit Coach.">
         
         <SettingRow title="Storage Location" description="Choose where your keys are saved securely.">

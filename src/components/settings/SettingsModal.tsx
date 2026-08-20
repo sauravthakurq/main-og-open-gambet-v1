@@ -86,7 +86,7 @@ export const SettingsModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: (
             </div>
 
             {/* Main Content Area */}
-            <div className="flex-1 relative overflow-y-auto custom-scrollbar bg-[radial-gradient(ellipse_at_top_right,rgba(227,193,149,0.05),transparent_50%)]">
+            <div className="flex-1 min-h-0 min-w-0 relative overflow-y-auto custom-scrollbar bg-[radial-gradient(ellipse_at_top_right,rgba(227,193,149,0.05),transparent_50%)]">
               {activeTab === 'account' && <AccountSettingsTab />}
               {activeTab === 'appearance' && <BoardAndPiecesSettings />}
               {activeTab === 'gameplay' && <GameplaySettingsTab />}
