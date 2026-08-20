@@ -195,19 +195,39 @@ export const StorageSettingsTab = () => {
 };
 
 export const AboutSettingsTab = () => {
+  const handleNav = (path: string) => {
+    window.location.href = path;
+  };
+
   return (
     <div className="w-full max-w-3xl mx-auto py-8 px-4 animate-in fade-in slide-in-from-bottom-4 duration-150">
-      <SettingSection title="About Gambit" icon={Info} description="Version 2.0.0 (Build 4209)">
-        <SettingAction label="Changelog" icon={FileText} onClick={() => alert('Version 2.0.0: Premium redesign and AI overhaul!')} />
-        <SettingAction label="Licenses" icon={FileText} onClick={() => alert('Open source licenses...')} />
-        <SettingAction label="Terms of Service" icon={Shield} onClick={() => alert('TOS...')} />
-        <SettingAction label="Privacy Policy" icon={Lock} onClick={() => alert('Privacy Policy...')} />
+      
+      <SettingSection title="About" icon={Info}>
+        <SettingAction label="About Open Gambit" icon={Info} onClick={() => handleNav('/about')} />
+        <SettingAction label="Version 0.1.0-alpha" icon={FileText} onClick={() => handleNav('/changelog')} />
       </SettingSection>
 
       <SettingSection title="Support" icon={HelpCircle}>
-        <SettingAction label="Contact Support" icon={MessageSquare} onClick={() => alert('Redirecting to support...')} />
-        <SettingAction label="Report a Bug" icon={Bug} onClick={() => alert('Bug report dialog opened.')} />
+        <SettingAction label="Help Center" icon={HelpCircle} onClick={() => handleNav('/help')} />
+        <SettingAction label="FAQ" icon={MessageSquare} onClick={() => handleNav('/faq')} />
+        <SettingAction label="Contact Support" icon={MessageSquare} onClick={() => handleNav('/contact')} />
+        <SettingAction label="Report a Bug" icon={Bug} onClick={() => handleNav('/contact')} />
       </SettingSection>
+
+      <SettingSection title="Legal" icon={FileText}>
+        <SettingAction label="Privacy Policy" icon={Lock} onClick={() => handleNav('/privacy')} />
+        <SettingAction label="Terms of Service" icon={Shield} onClick={() => handleNav('/terms')} />
+        <SettingAction label="Cookie Policy" icon={Database} onClick={() => handleNav('/cookies')} />
+        <SettingAction label="Fair Play Policy" icon={Swords} onClick={() => handleNav('/fair-play')} />
+        <SettingAction label="Community Guidelines" icon={Globe} onClick={() => handleNav('/community-guidelines')} />
+      </SettingSection>
+
+      <SettingSection title="Security & Tech" icon={Shield}>
+        <SettingAction label="Security" icon={Shield} onClick={() => handleNav('/security')} />
+        <SettingAction label="Licenses & Open Source" icon={FileText} onClick={() => handleNav('/licenses')} />
+        <SettingAction label="Accessibility" icon={Eye} onClick={() => handleNav('/accessibility')} />
+      </SettingSection>
+      
     </div>
   );
 };

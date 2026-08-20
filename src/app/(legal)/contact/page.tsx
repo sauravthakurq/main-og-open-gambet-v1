@@ -1,47 +1,32 @@
 import React from 'react';
+import { siteConfig } from '@/config/site';
+import { MessageSquare, Bug, Shield, Briefcase } from 'lucide-react';
+
+export const metadata = { title: 'Contact | Open Gambit' };
 
 export default function ContactPage() {
   return (
     <>
-      <h1 className="text-3xl md:text-5xl font-bold tracking-tight mb-2">Contact Us</h1>
-      <p className="text-white/50 mb-8">Get in touch with the Open Gambit team.</p>
-
-      <div className="prose prose-invert prose-white max-w-none text-white/80 space-y-6">
-        <section>
-          <h2 className="text-xl font-bold text-white mt-8 mb-4">Support & Feedback</h2>
-          <p>
-            We are constantly looking to improve Open Gambit. If you have any feedback, feature requests, or run into any bugs, we would love to hear from you.
-          </p>
-          <p className="mt-4">
-            <strong>Email:</strong> support@opengambit.com
-          </p>
-        </section>
-
-        <section>
-          <h2 className="text-xl font-bold text-white mt-8 mb-4">GitHub Repository</h2>
-          <p>
-            Open Gambit is an open-source project. You can report bugs, submit pull requests, and view our roadmap directly on GitHub.
-          </p>
-          <p className="mt-4">
-            <a href="https://github.com/open-gambit" target="_blank" rel="noopener noreferrer" className="text-[var(--color-accent)] hover:underline font-semibold">
-              View on GitHub
-            </a>
-          </p>
-        </section>
-
-        <section>
-          <h2 className="text-xl font-bold text-white mt-8 mb-4">Frequently Asked Questions</h2>
-          <ul className="list-disc pl-5 mt-2 space-y-4">
-            <li>
-              <strong>How do I configure my own AI API keys?</strong>
-              <br />You can enter your own OpenAI, Anthropic, or Google Gemini keys in the Settings modal under the "API Keys" tab. Your keys are stored securely in your browser's local storage.
-            </li>
-            <li>
-              <strong>Can I play offline?</strong>
-              <br />Yes! The core application, local Stockfish engine, and your recent games are available completely offline once the PWA is installed.
-            </li>
-          </ul>
-        </section>
+      <div className="mb-8">
+        <h1 className="text-3xl md:text-5xl font-bold tracking-tight text-white mb-3">Contact Us</h1>
+        <p className="text-white/40 text-sm font-medium">How can we help you?</p>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <a href={siteConfig.links.githubRepo + "/issues"} target="_blank" className="p-6 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 transition-colors">
+          <Bug className="text-white mb-4" size={24} />
+          <h3 className="font-bold text-white mb-2">Report a Bug</h3>
+          <p className="text-sm text-white/50">Submit an issue on our GitHub repository.</p>
+        </a>
+        <a href={siteConfig.links.linkedin} target="_blank" className="p-6 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 transition-colors">
+          <Briefcase className="text-white mb-4" size={24} />
+          <h3 className="font-bold text-white mb-2">Business Inquiries</h3>
+          <p className="text-sm text-white/50">Reach out to the creator via LinkedIn.</p>
+        </a>
+        <div className="p-6 rounded-2xl bg-white/5 border border-white/10">
+          <Shield className="text-white mb-4" size={24} />
+          <h3 className="font-bold text-white mb-2">Security Disclosure</h3>
+          <p className="text-sm text-white/50">Please report vulnerabilities directly via GitHub or LinkedIn DMs for responsible disclosure.</p>
+        </div>
       </div>
     </>
   );

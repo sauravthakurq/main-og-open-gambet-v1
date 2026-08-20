@@ -1,51 +1,64 @@
 import React from 'react';
+import { siteConfig } from '@/config/site';
+
+export const metadata = {
+  title: 'Terms of Service | Open Gambit',
+  description: 'Terms of Service and acceptable use policy for Open Gambit.',
+};
 
 export default function TermsPage() {
   return (
     <>
-      <h1 className="text-3xl md:text-5xl font-bold tracking-tight mb-2">Terms of Service</h1>
-      <p className="text-white/50 mb-8">Last updated: August 4, 2026</p>
+      <div className="mb-8">
+        <h1 className="text-3xl md:text-5xl font-bold tracking-tight text-white mb-3">Terms of Service</h1>
+        <p className="text-white/40 text-sm font-medium">Last updated: {siteConfig.legal.lastUpdated} &middot; Version: {siteConfig.legal.version}</p>
+      </div>
 
-      <div className="prose prose-invert prose-white max-w-none text-white/80 space-y-6">
+      <div className="prose prose-invert prose-white max-w-none text-white/70 space-y-6 leading-relaxed font-medium">
         <section>
-          <h2 className="text-xl font-bold text-white mt-8 mb-4">1. User Accounts</h2>
           <p>
-            By creating an account on Open Gambit, you agree to provide accurate and complete information. 
-            You are responsible for maintaining the confidentiality of your account credentials and for all activities that occur under your account.
+            By accessing or using {siteConfig.name}, you agree to be bound by these Terms of Service. If you disagree with any part of these terms, you may not access the service.
           </p>
         </section>
 
         <section>
-          <h2 className="text-xl font-bold text-white mt-8 mb-4">2. AI Usage & Fair Play Policy</h2>
+          <h2 className="text-xl font-bold text-white mt-8 mb-4">1. Acceptable Use</h2>
           <p>
-            Open Gambit integrates powerful AI models (such as GPT-4o, Claude 3.5, Gemini 1.5) for analysis and computer matches. 
-            However, cheating against human players using external engines or the built-in AI is strictly prohibited. 
-            Violations of our Anti-Cheating Policy will result in immediate account suspension.
+            You agree to use Open Gambit only for lawful purposes and in accordance with our <a href="/fair-play" className="text-white underline underline-offset-4 decoration-white/30 hover:decoration-white">Fair Play Policy</a>. You must not:
+          </p>
+          <ul className="list-disc pl-5 mt-2 space-y-2">
+            <li>Attempt to disrupt, degrade, or exploit the service infrastructure.</li>
+            <li>Use the platform to distribute spam or malicious content.</li>
+            <li>Harass, abuse, or harm other users during online multiplayer matches.</li>
+            <li>Engage in cheating or unauthorized engine assistance during competitive human matches.</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2 className="text-xl font-bold text-white mt-8 mb-4">2. AI Provider Usage</h2>
+          <p>
+            When utilizing the Bring Your Own Key (BYOK) functionality, you are responsible for complying with the Terms of Service of the respective AI provider (e.g., OpenAI, Anthropic, Google). You are solely responsible for any costs, rate limits, or usage violations incurred on your API keys.
           </p>
         </section>
 
         <section>
-          <h2 className="text-xl font-bold text-white mt-8 mb-4">3. Community Rules</h2>
+          <h2 className="text-xl font-bold text-white mt-8 mb-4">3. Intellectual Property</h2>
           <p>
-            We expect all users to maintain a respectful and welcoming environment. 
-            Abuse, harassment, spam, and illegal content are strictly forbidden. 
-            We reserve the right to moderate, suspend, or terminate accounts that violate these guidelines.
+            The Open Gambit application, interface, branding, and original content are the intellectual property of Open Gambit and its creator. The platform integrates open-source components (such as Stockfish and chess.js) which remain under their respective licenses.
           </p>
         </section>
 
         <section>
-          <h2 className="text-xl font-bold text-white mt-8 mb-4">4. Intellectual Property</h2>
+          <h2 className="text-xl font-bold text-white mt-8 mb-4">4. Limitations of Liability</h2>
           <p>
-            Open Gambit and its original content, features, and functionality are owned by the Open Gambit team. 
-            You may not reproduce, distribute, or create derivative works without prior written consent.
+            Open Gambit is provided "as is" and "as available" without any warranties of any kind. We do not guarantee that the service will be uninterrupted, secure, or error-free. In no event shall Open Gambit or its creators be liable for any indirect, incidental, or consequential damages arising from your use of the platform.
           </p>
         </section>
 
         <section>
-          <h2 className="text-xl font-bold text-white mt-8 mb-4">5. Limitation of Liability</h2>
+          <h2 className="text-xl font-bold text-white mt-8 mb-4">5. Termination</h2>
           <p>
-            Open Gambit is provided "as is" and "as available". We make no warranties, expressed or implied, 
-            and hereby disclaim and negate all other warranties including, without limitation, implied warranties or conditions of merchantability.
+            We reserve the right to terminate or suspend your access to the service immediately, without prior notice, for conduct that we determine, in our sole discretion, violates these Terms or is harmful to other users or the service.
           </p>
         </section>
       </div>

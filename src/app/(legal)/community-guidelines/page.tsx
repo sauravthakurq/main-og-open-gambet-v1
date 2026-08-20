@@ -1,47 +1,21 @@
 import React from 'react';
 
-export default function CommunityGuidelinesPage() {
+export const metadata = { title: 'Community Guidelines | Open Gambit' };
+
+export default function CommunityPage() {
   return (
     <>
-      <h1 className="text-3xl md:text-5xl font-bold tracking-tight mb-2">Community Guidelines</h1>
-      <p className="text-white/50 mb-8">Last updated: August 4, 2026</p>
-
-      <div className="prose prose-invert prose-white max-w-none text-white/80 space-y-6">
-        <section>
-          <h2 className="text-xl font-bold text-white mt-8 mb-4">Welcome to Open Gambit</h2>
-          <p>
-            Our community is built on mutual respect and a shared passion for chess. 
-            To maintain a positive environment for everyone, we ask that you follow these guidelines.
-          </p>
-        </section>
-
-        <section>
-          <h2 className="text-xl font-bold text-white mt-8 mb-4">1. Fair Play</h2>
-          <p>
-            Chess is a game of skill and intellect. When playing online against other human players:
-          </p>
-          <ul className="list-disc pl-5 mt-2 space-y-2">
-            <li>Do not use external chess engines, AI models, or tablebases to assist your moves.</li>
-            <li>Do not purposely stall or abort games to avoid losing.</li>
-            <li>Do not artificially manipulate your rating (sandbagging).</li>
-          </ul>
-        </section>
-
-        <section>
-          <h2 className="text-xl font-bold text-white mt-8 mb-4">2. Respectful Behavior</h2>
-          <p>
-            Treat your opponents and fellow community members with respect. 
-            Harassment, hate speech, threats, and toxic behavior will not be tolerated and will lead to an immediate ban.
-          </p>
-        </section>
-
-        <section>
-          <h2 className="text-xl font-bold text-white mt-8 mb-4">3. Reporting Violations</h2>
-          <p>
-            If you encounter a user who is cheating or behaving inappropriately, please report them using the in-game reporting tool or contact our support team. 
-            We review all reports and take appropriate action to maintain the integrity of our community.
-          </p>
-        </section>
+      <div className="mb-8">
+        <h1 className="text-3xl md:text-5xl font-bold tracking-tight text-white mb-3">Community Guidelines</h1>
+      </div>
+      <div className="prose prose-invert prose-white max-w-none text-white/70 space-y-6">
+        <p>We are building a community centered around the love of chess and the exploration of artificial intelligence. To maintain a welcoming environment, we require all players to adhere to these standards.</p>
+        <h2 className="text-xl font-bold text-white mt-8 mb-4">Respect and Sportsmanship</h2>
+        <p>Treat your opponents with respect. Harassment, hate speech, threats, and abusive language in chat or usernames will result in immediate account suspension.</p>
+        <h2 className="text-xl font-bold text-white mt-8 mb-4">No Spam</h2>
+        <p>Do not use the platform to distribute spam, malicious links, or unauthorized advertisements.</p>
+        <h2 className="text-xl font-bold text-white mt-8 mb-4">Reporting</h2>
+        <p>If you encounter a player violating these guidelines, please report them using the in-game reporting tool or by contacting support.</p>
       </div>
     </>
   );

@@ -26,7 +26,7 @@ export const SettingsModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: (
     { id: 'privacy', label: 'Privacy', icon: Shield },
     { id: 'storage', label: 'Storage', icon: Database },
     { id: 'api', label: 'API Keys', icon: Key },
-    { id: 'about', label: 'About', icon: Info },
+    { id: 'about', label: 'About & Legal', icon: Info },
   ] as const;
 
   return (
