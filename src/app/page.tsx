@@ -123,7 +123,7 @@ export default function Home() {
   }, [fen, turn, aiColor, startThinking]);
 
   return (
-    <div className="flex flex-col h-screen w-full bg-[var(--color-void)] text-[var(--color-ivory)] overflow-hidden font-sans relative">
+    <div className="flex flex-col min-h-[100dvh] sm:h-screen w-full bg-[var(--color-void)] text-[var(--color-ivory)] overflow-auto sm:overflow-hidden font-sans relative">
       <OnboardingModal />
       <GameOverModal />
       <GameMenuModal />
@@ -134,10 +134,10 @@ export default function Home() {
       {isOnline && onlineGameId && <InGameChat gameId={onlineGameId} />}
       
       {(appState === 'playing' || appState === 'game_over') && (
-        <div className="flex-1 flex flex-col h-full w-full relative bg-transparent overflow-hidden pb-[env(safe-area-inset-bottom)] pt-[env(safe-area-inset-top)]">
+        <div className="flex-1 flex flex-col min-h-full w-full relative bg-transparent overflow-visible sm:overflow-hidden pb-[env(safe-area-inset-bottom)] pt-[env(safe-area-inset-top)]">
           <Navbar />
           
-          <main className="flex-1 flex flex-col lg:flex-row overflow-y-auto lg:overflow-hidden p-3 sm:p-4 lg:p-6 pt-3 sm:pt-[80px] lg:pt-[80px] pb-[96px] sm:pb-[calc(1rem+env(safe-area-inset-bottom))] gap-4 lg:gap-6 w-full max-w-[1800px] mx-auto">
+          <main className="flex-1 flex flex-col lg:flex-row overflow-visible sm:overflow-y-auto lg:overflow-hidden p-3 sm:p-4 lg:p-6 pt-3 sm:pt-[80px] lg:pt-[80px] pb-[96px] sm:pb-[calc(1rem+env(safe-area-inset-bottom))] gap-4 lg:gap-6 w-full max-w-[1800px] mx-auto">
             
             {/* Left Column: Player Workspace (Desktop) / Top & Bottom (Mobile) */}
             <aside className="flex flex-col gap-4 lg:h-full w-full lg:w-[320px] shrink-0 order-1 lg:order-1">
