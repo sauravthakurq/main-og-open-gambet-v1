@@ -73,25 +73,18 @@ export const PWAInstallPrompt = () => {
   const [showIOSInstructions, setShowIOSInstructions] = useState(false);
 
   useEffect(() => {
-    if (window.matchMedia('(display-mode: standalone)').matches) {
-      setIsInstalled(true);
-      return;
-    }
-
-    const hasDismissed = localStorage.getItem('pwa-prompt-dismissed');
-    if (hasDismissed === 'true') {
-      return;
-    }
-
     const handleBeforeInstallPrompt = (e: Event) => {
       e.preventDefault();
       windowDeferredPrompt = e as BeforeInstallPromptEvent;
-      setTimeout(() => setIsOpen(true), 2500);
+      
+      const hasDismissed = localStorage.getItem('pwa-prompt-dismissed');
+      if (hasDismissed !== 'true' && !window.matchMedia('(display-mode: standalone)').matches) {
+        setTimeout(() => setIsOpen(true), 2500);
+      }
     };
 
-    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-
     const handleManualTrigger = async () => {
+      // Allow manual trigger even if dismissed previously
       if (windowDeferredPrompt) {
         windowDeferredPrompt.prompt();
         const { outcome } = await windowDeferredPrompt.userChoice;
@@ -100,7 +93,7 @@ export const PWAInstallPrompt = () => {
           setIsOpen(false);
         }
         windowDeferredPrompt = null;
-      } else if (!isInstalled) {
+      } else if (!window.matchMedia('(display-mode: standalone)').matches) {
         setIsOpen(true);
       }
     };
@@ -111,15 +104,20 @@ export const PWAInstallPrompt = () => {
       windowDeferredPrompt = null;
     };
 
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
     window.addEventListener('appinstalled', handleAppInstalled);
     window.addEventListener('show-install-prompt', handleManualTrigger);
+
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+      setIsInstalled(true);
+    }
 
     return () => {
       window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
       window.removeEventListener('show-install-prompt', handleManualTrigger);
       window.removeEventListener('appinstalled', handleAppInstalled);
     };
-  }, [isInstalled]);
+  }, []);
 
   const handleClose = () => {
     setIsAnimatingOut(true);
