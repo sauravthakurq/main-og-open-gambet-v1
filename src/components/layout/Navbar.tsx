@@ -186,13 +186,9 @@ export default function Navbar() {
         </div>
       </header>
 
-      {/* 
-        Mobile Navbar (xs) 
-        Fixed to BOTTOM
-      */}
-      <header className="flex sm:hidden fixed bottom-0 left-0 w-full items-center justify-between px-2 pb-[env(safe-area-inset-bottom)] z-50 bg-transparent">
+      {/* Mobile Navbar (xs) Fixed to BOTTOM */}
+      <header className="flex sm:hidden fixed bottom-0 left-0 w-full items-center justify-between px-2 pb-[env(safe-area-inset-bottom)] z-50 bg-[#050505]/95 backdrop-blur-md border-t border-white/5 pt-1">
         <div className="flex items-center justify-between w-full max-w-[400px] mx-auto pt-1 pb-1">
-          
           <button 
             onClick={() => setIsGameMenuOpen(true)}
             className="flex flex-col items-center justify-center w-14 h-11 text-white/50 hover:text-white transition-colors"
